@@ -24,8 +24,7 @@ public class AuthUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		 Optional<User> user = userRepository.findByEmail(username);
 		return user.map(AuthUserDetails::new)
-        .orElseThrow(() -> new UsernameNotFoundException("user not found " + username));
-		 
+        .orElseThrow(() -> new UsernameNotFoundException("Bad Credential Exception ")); 
 	}
 
 }
