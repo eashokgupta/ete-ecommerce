@@ -6,17 +6,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.etelligens.ecommerce.auhtorization.exception.LoginException;
 import com.etelligens.ecommerce.auhtorization.model.AuthenticationRequest;
+import com.etelligens.ecommerce.auhtorization.model.AuthenticationResponse;
 import com.etelligens.ecommerce.auhtorization.service.JwtUtil;
 import com.etelligens.ecommerce.auhtorization.service.UserService;
+import com.etelligens.ecommerce.auhtorization.service.ValidateService;
 import com.etelligens.ecommerce.model.UserDTO;
+import com.etelligens.ecommerce.model.UserResponseDTO;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -28,24 +33,37 @@ public class AuthController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	ValidateService validateService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
     
-    @PostMapping("/registration")
-    public String addNewUser(@RequestBody UserDTO userInfo) {
-        return userService.addUser(userInfo);
-    }
-	
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthenticationRequest authRequest) throws LoginException {
-    	try {
-    		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-    	}catch (BadCredentialsException e) {
-    		throw new LoginException("Bad Credential Exception");
-		}
-        
-        return new ResponseEntity<>(jwtUtil.generateToken(authRequest.getUsername()), HttpStatus.OK) ;
     
+    /*
+     * @param userInfo - to add/register new user
+     */
+    @PostMapping("/registration")
+    public ResponseEntity<UserResponseDTO> addNewUser(@RequestBody UserDTO userInfo) throws LoginException {
+        return new ResponseEntity<>(userService.addUser(userInfo), HttpStatus.OK);
     }
+	/*
+	 * @param authRequest  - include UserName/email and password. 
+	 * Use to authenticate user.*/
+    @PostMapping("/login")
+    public ResponseEntity<UserResponseDTO > authenticateAndGetToken(@RequestBody AuthenticationRequest authRequest) throws LoginException {
+    	
+        return new ResponseEntity<>(userService.login(authRequest), HttpStatus.OK) ;
+    }
+    
+    /**
+	 * @param token - to validate the token
+	 * Sends the request header as "Authorization"
+	 * and returns the validity of token
+	 */
+	@GetMapping("/validate")
+	public AuthenticationResponse getValidity(@RequestHeader("Authorization") final String token) {
+		return validateService.validate(token);
+	}
 }
