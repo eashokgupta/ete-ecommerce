@@ -23,7 +23,7 @@ public class UserDTO {
 	
 	private String email;
 	
-//	private int contactNumber;
+	private int contactNumber;
 //	
 //	private String socialId;
 //	
