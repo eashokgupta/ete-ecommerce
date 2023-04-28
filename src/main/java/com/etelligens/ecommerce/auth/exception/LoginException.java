@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.exception;
+package com.etelligens.ecommerce.auth.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

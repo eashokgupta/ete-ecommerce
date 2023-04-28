@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.service;
+package com.etelligens.ecommerce.auth.service;
 
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.etelligens.ecommerce.auhtorization.model.User;
+import com.etelligens.ecommerce.auth.model.User;
 
 import lombok.NoArgsConstructor;
 

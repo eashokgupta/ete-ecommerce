@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.model;
+package com.etelligens.ecommerce.auth.model;
 
 import org.springframework.stereotype.Component;
 
@@ -12,9 +12,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class AuthenticationResponse {
+public class AuthenticationRequest {
 	
-	private String jwtToken;
-	private Boolean valid;
+	/**
+	* This will be the username
+	*/ 
+		private String username;
+	/**
+	* This will be the password
+	*/ 
+		private String password;
 
 }

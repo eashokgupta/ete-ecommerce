@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.exception;
+package com.etelligens.ecommerce.auth.exception;
 
 import java.time.LocalDateTime;
 

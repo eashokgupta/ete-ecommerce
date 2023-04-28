@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.model;
+package com.etelligens.ecommerce.auth.model;
 
 import java.io.Serializable;
 

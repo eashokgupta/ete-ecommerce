@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.model;
+package com.etelligens.ecommerce.auth.dto;
 
 import java.sql.Blob;
 import java.util.HashSet;
