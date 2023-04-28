@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.model;
+package com.etelligens.ecommerce.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

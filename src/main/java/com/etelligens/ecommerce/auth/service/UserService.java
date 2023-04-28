@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.service;
+package com.etelligens.ecommerce.auth.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +8,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.etelligens.ecommerce.auhtorization.exception.LoginException;
-import com.etelligens.ecommerce.auhtorization.model.AuthenticationRequest;
-import com.etelligens.ecommerce.auhtorization.model.User;
-import com.etelligens.ecommerce.auhtorization.repositories.UserRepository;
-import com.etelligens.ecommerce.model.UserDTO;
-import com.etelligens.ecommerce.model.UserResponseDTO;
+import com.etelligens.ecommerce.auth.dto.UserDTO;
+import com.etelligens.ecommerce.auth.dto.UserResponseDTO;
+import com.etelligens.ecommerce.auth.exception.LoginException;
+import com.etelligens.ecommerce.auth.model.AuthenticationRequest;
+import com.etelligens.ecommerce.auth.model.User;
+import com.etelligens.ecommerce.auth.repositories.UserRepository;
 
 @Service
 public class UserService {

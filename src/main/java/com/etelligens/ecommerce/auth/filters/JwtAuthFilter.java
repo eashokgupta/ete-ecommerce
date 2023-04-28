@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.filters;
+package com.etelligens.ecommerce.auth.filters;
 
 import java.io.IOException;
 
@@ -8,10 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import com.etelligens.ecommerce.auhtorization.service.AuthUserDetailsService;
-import com.etelligens.ecommerce.auhtorization.service.JwtUtil;
+import com.etelligens.ecommerce.auth.service.AuthUserDetailsService;
+import com.etelligens.ecommerce.auth.service.JwtUtil;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

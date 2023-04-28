@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.service;
+package com.etelligens.ecommerce.auth.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

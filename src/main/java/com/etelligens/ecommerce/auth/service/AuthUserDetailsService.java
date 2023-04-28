@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.service;
+package com.etelligens.ecommerce.auth.service;
 
 import java.util.Optional;
 
@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.etelligens.ecommerce.auhtorization.model.User;
-import com.etelligens.ecommerce.auhtorization.repositories.UserRepository;
+import com.etelligens.ecommerce.auth.model.User;
+import com.etelligens.ecommerce.auth.repositories.UserRepository;
 
 @Component
 @Service

@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auhtorization.config;
+package com.etelligens.ecommerce.auth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +14,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import com.etelligens.ecommerce.auhtorization.filters.JwtAuthFilter;
-import com.etelligens.ecommerce.auhtorization.service.AuthUserDetailsService;
+
+import com.etelligens.ecommerce.auth.filters.JwtAuthFilter;
+import com.etelligens.ecommerce.auth.service.AuthUserDetailsService;
+
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -33,11 +35,12 @@ public class SecurityConfig {
 
 	    @Bean
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	        return http.csrf().disable()
+	        return http
+	        		.csrf().disable()
 	                .authorizeHttpRequests()
 	                .requestMatchers("/auth/registration","/auth/login").permitAll()
 	                .and()
-	                .authorizeHttpRequests().requestMatchers("/auth/**")
+	                .authorizeHttpRequests().requestMatchers("/auth/**","/prod/**")
 	                .authenticated().and()
 	                .sessionManagement()
 	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
