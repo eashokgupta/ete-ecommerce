@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import com.etelligens.ecommerce.repositories.ProductImagesRepo;
 import com.etelligens.ecommerce.repositories.ProductRepo;
 
 @Service
+@Component
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
@@ -46,14 +48,14 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product getProductById(int productid) {
 
-		return productRepo.findByProductId(productid)
+		return productRepo.findById(productid)
 				.orElseThrow(() -> new ProductNotExistException("Product is present"));
 	}
 
 	@Override
 	public String deleteProductById(int id) {
 		productRepo.deleteById(id);
-		Boolean flag = productRepo.findByProductId(id).isEmpty();
+		Boolean flag = productRepo.findById(id).isEmpty();
 		if (Boolean.TRUE.equals(flag)) {
 			return "Product Successfully Deleted";
 		}
@@ -62,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDto updateProduct(ProductDto product) throws ProductNotExistException {
-		Optional<Product> existingProduct = productRepo.findByProductId(product.getId());
+		Optional<Product> existingProduct = productRepo.findById(product.getId());
 		try {
 			if (!existingProduct.isEmpty()) {
 				Product prod = mapper.map(existingProduct, Product.class);
