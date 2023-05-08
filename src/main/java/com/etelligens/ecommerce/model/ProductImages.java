@@ -22,7 +22,7 @@ public class ProductImages implements Serializable{
 	private static final long serialVersionUID = 5008135862648871295L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@Lob

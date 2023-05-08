@@ -11,6 +11,7 @@ import com.etelligens.ecommerce.dto.ProductDto;
 import com.etelligens.ecommerce.dto.ProductImagesDTO;
 import com.etelligens.ecommerce.model.Product;
 
+
 @Component
 @Service
 public interface ProductService {
