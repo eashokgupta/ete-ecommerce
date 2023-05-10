@@ -24,7 +24,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
 	@Bean
-	// authentication
 	UserDetailsService userDetailsService() {
 		return new AuthUserDetailsService();
 	}

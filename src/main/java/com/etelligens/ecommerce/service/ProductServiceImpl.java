@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ import com.etelligens.ecommerce.repositories.ProductImagesRepo;
 import com.etelligens.ecommerce.repositories.ProductRepo;
 
 @Service
+@Component
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
@@ -83,11 +85,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductDto store(MultipartFile[] files, ProductDto product) throws IOException {
 		
-		Set<Images> images = new HashSet();
+//		Set<Images> images = new HashSet();
 		Set<ImagesDTO> productImagesDTOs = new HashSet<>();
 		Arrays.asList(files).stream().forEach(file -> {
 			try {
-			String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//			String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 			byte[] img = file.getBytes();
 			ImagesDTO productImagesDTO = new ImagesDTO();
 			productImagesDTO.setImg(img);
@@ -110,14 +112,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> getProductByCategoryId(Long id) {
 		List<Product> products = new ArrayList<>();
-		System.out.println("  id ................"+id);
 		try {
 			products = productRepo.findAllByCategoryId(id);
 		}catch (Exception e) {
 			e.getMessage();
 		}
-		
-		System.out.println(products.isEmpty());
 		products.stream().forEach((d)->System.out.println(d.getId()));
 		
 		return products;

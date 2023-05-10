@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.etelligens.ecommerce.dto.ProductDto;
 import com.etelligens.ecommerce.model.Product;
 
+
 @Component
 @Service
 public interface ProductService {
