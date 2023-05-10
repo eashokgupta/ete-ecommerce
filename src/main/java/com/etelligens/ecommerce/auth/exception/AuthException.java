@@ -28,5 +28,11 @@ public class AuthException {
     public @ResponseBody Error handleProductException(LoginException e){
         return new Error(HttpStatus.BAD_REQUEST,LocalDateTime.now(),e.getMessage());
     }
+	
+	@ExceptionHandler(value=CategoryNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public @ResponseBody Error handleCategoryException(CategoryNotFoundException e) {
+		return new Error(HttpStatus.BAD_REQUEST, LocalDateTime.now(), e.getMessage());
+	}
 
 }

@@ -1,4 +1,4 @@
-package com.etelligens.ecommerce.auth.dto;
+package com.etelligens.ecommerce.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,14 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDTO {
+public class SlugDTO {
 
-	private Long id;
-
+	private int id;
+	
 	private String name;
+	
+	private String url;
+	
+	private String description;
 
 }

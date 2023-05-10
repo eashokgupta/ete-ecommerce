@@ -3,7 +3,7 @@ package com.etelligens.ecommerce.auth.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code=HttpStatus.NOT_FOUND , reason="Username or Password incorrect")
+@ResponseStatus(code=HttpStatus.NOT_FOUND , reason="Password Incorrect!")
 public class LoginException extends RuntimeException{
 
 	/**

@@ -1,4 +1,5 @@
-package com.etelligens.ecommerce.auth.dto;
+package com.etelligens.ecommerce.dto;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +10,9 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDTO {
-
-	private Long id;
-
-	private String name;
-
+public class ImagesDTO {
+	
+	private int id;
+	private byte[] img;
+	
 }

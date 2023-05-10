@@ -25,40 +25,40 @@ import com.etelligens.ecommerce.auth.service.ValidateService;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-	
+
 	@Autowired
 	JwtUtil jwtUtil;
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	ValidateService validateService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    
-    
-    /*
-     * @param userInfo - to add/register new user
-     */
-    @PostMapping("/registration")
-    public ResponseEntity<UserResponseDTO> addNewUser(@RequestBody UserDTO userInfo) throws LoginException {
-        return new ResponseEntity<>(userService.addUser(userInfo), HttpStatus.OK);
-    }
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
 	/*
-	 * @param authRequest  - include UserName/email and password. 
-	 * Use to authenticate user.*/
-    @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO > authenticateAndGetToken(@RequestBody AuthenticationRequest authRequest) throws LoginException {
-    	
-        return new ResponseEntity<>(userService.login(authRequest), HttpStatus.OK) ;
-    }
-    
-    /**
-	 * @param token - to validate the token
-	 * Sends the request header as "Authorization"
-	 * and returns the validity of token
+	 * @param userInfo - to add/register new user
+	 */
+	@PostMapping("/registration")
+	public ResponseEntity<UserResponseDTO> addNewUser(@RequestBody UserDTO userInfo) {
+		return new ResponseEntity<>(userService.addUser(userInfo), HttpStatus.OK);
+	}
+
+	/*
+	 * @param authRequest - include UserName/email and password. Use to authenticate
+	 * user.
+	 */
+	@PostMapping("/login")
+	public ResponseEntity<UserResponseDTO> authenticateAndGetToken(@RequestBody AuthenticationRequest authRequest) {
+
+		return new ResponseEntity<>(userService.login(authRequest), HttpStatus.OK);
+	}
+
+	/**
+	 * @param token - to validate the token Sends the request header as
+	 *              "Authorization" and returns the validity of token
 	 */
 	@GetMapping("/validate")
 	public AuthenticationResponse getValidity(@RequestHeader("Authorization") final String token) {
