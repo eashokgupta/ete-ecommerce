@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.etelligens.ecommerce.auth.dto.UserDTO;
 import com.etelligens.ecommerce.auth.dto.UserResponseDTO;
-import com.etelligens.ecommerce.auth.exception.LoginException;
 import com.etelligens.ecommerce.auth.model.AuthenticationRequest;
 import com.etelligens.ecommerce.auth.model.AuthenticationResponse;
 import com.etelligens.ecommerce.auth.service.JwtUtil;
