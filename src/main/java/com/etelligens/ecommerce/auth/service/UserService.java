@@ -1,9 +1,10 @@
 package com.etelligens.ecommerce.auth.service;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class UserService {
 	@Autowired
 	private JwtUtil jwtUtil;
 
-	public UserResponseDTO addUser(UserDTO userInfo) throws LoginException {
+	public UserResponseDTO addUser(UserDTO userInfo)  {
 		String authPassword = userInfo.getPassword();
 		userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
 		User user = mapp.map(userInfo, User.class);
@@ -52,7 +53,7 @@ public class UserService {
 			uResponseDTO.setUsername(user1.getName());
 			uResponseDTO.setContactNumber(user1.getContactNumber());
 			return uResponseDTO;
-		} catch (BadCredentialsException e) {
+		} catch (Exception e) {
 			throw new LoginException(userInfo.getEmail() + " is already existing!");
 		}
 
@@ -63,12 +64,17 @@ public class UserService {
 	}
 	
 	public UserResponseDTO login(AuthenticationRequest authRequest) {
+		Optional<User> user = userRepository.findByEmail(authRequest.getUsername());
+		if(user.isEmpty()) {
+			throw new LoginException("User Not Found!");
+		}
 		try {
+			
 		authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
-		} catch (BadCredentialsException e) {
-			throw new LoginException("Bad Credential Exception");
+		} catch (Exception e) {
+			throw new LoginException("Password Incorrect!");
 		}
 		String token = jwtUtil.generateToken(authRequest.getUsername());
 		UserResponseDTO uResponseDTO = new UserResponseDTO();

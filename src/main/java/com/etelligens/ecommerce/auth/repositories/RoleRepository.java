@@ -8,4 +8,6 @@ import com.etelligens.ecommerce.auth.model.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
+	Role findByName(String name);
+
 }

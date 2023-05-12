@@ -43,6 +43,8 @@ public class User implements Serializable {
 	
 	private int contactNumber;
 	
+	private String providerId;
+	
 	@Column(name="password", nullable = false)
 	private String password;
 	

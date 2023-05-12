@@ -22,45 +22,38 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
-	    @Bean
-	    //authentication
-	     UserDetailsService userDetailsService() {
-	        return new AuthUserDetailsService();
-	    }
 
-	    @Bean
-	    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
-	        return http
-	        		.csrf().disable()
-	                .authorizeHttpRequests()
-	                .requestMatchers("/auth/registration","/auth/login").permitAll()
-	                .and()
-	                .authorizeHttpRequests().requestMatchers("/auth/**","/prod/**","/**")
-	                .authenticated().and()
-	                .sessionManagement()
-	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	                .and()
-	                .authenticationProvider(authenticationProvider())
-	                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-	                .build();
-	    }
-
-	    @Bean
-	    public PasswordEncoder passwordEncoder() {
-	        return new BCryptPasswordEncoder();
-	    }
-
-	    @Bean
-	    public AuthenticationProvider authenticationProvider(){
-	        DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
-	        authenticationProvider.setUserDetailsService(userDetailsService());
-	        authenticationProvider.setPasswordEncoder(passwordEncoder());
-	        return authenticationProvider;
-	    }
-	    @Bean
-	    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-	        return config.getAuthenticationManager();
-	    }
-
+	@Bean
+	UserDetailsService userDetailsService() {
+		return new AuthUserDetailsService();
 	}
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
+		return http.csrf().disable().authorizeHttpRequests()
+				.requestMatchers("/auth/registration", "/auth/login","/prod/**").permitAll().and()
+				.authorizeHttpRequests().requestMatchers("/auth/**").authenticated().and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.authenticationProvider(authenticationProvider())
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService());
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		return authenticationProvider;
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
+	}
+
+}

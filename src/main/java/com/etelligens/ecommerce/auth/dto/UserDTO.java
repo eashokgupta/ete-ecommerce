@@ -24,8 +24,8 @@ public class UserDTO {
 	private String email;
 	
 	private int contactNumber;
-//	
-//	private String socialId;
+	
+	private String providerId;
 //	
 //	private String deviceId;
 //	

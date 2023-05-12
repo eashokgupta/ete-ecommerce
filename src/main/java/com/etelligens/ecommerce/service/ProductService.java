@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.etelligens.ecommerce.dto.ProductDto;
-import com.etelligens.ecommerce.dto.ProductImagesDTO;
 import com.etelligens.ecommerce.model.Product;
 
 
@@ -25,5 +24,7 @@ public interface ProductService {
 	public String deleteProductById(int id);
 
 	public ProductDto updateProduct(ProductDto product);
-	public ProductImagesDTO store(MultipartFile file) throws IOException;
+	public ProductDto store(MultipartFile[] file, ProductDto product) throws IOException;
+
+	public List<Product> getProductByCategoryId(Long id);
 }
