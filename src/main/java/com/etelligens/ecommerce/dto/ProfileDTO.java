@@ -14,7 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProfileDTO {
 	
-	private Integer profileId;
+	
+	private int user;
+	private Long profileId;
 	private String firstName;
 	private String lastName;
 	private String gender;

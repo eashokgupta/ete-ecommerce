@@ -30,7 +30,7 @@ public class Profile implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer profileId;
+	private Long profileId;
 	private String firstName;
 	private String lastName;
 	private String gender;

@@ -1,6 +1,5 @@
 package com.etelligens.ecommerce.auth.dto;
 
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,11 +25,6 @@ public class UserDTO {
 	private int contactNumber;
 	
 	private String providerId;
-//	
-//	private String deviceId;
-//	
-//	private Blob profilePhoto;
-	
 	
 	private String password;
 	

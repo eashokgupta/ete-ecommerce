@@ -24,7 +24,7 @@ import com.google.gson.Gson;
 
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/ecommerce")
 public class ProfileController {
 
 	@Autowired
@@ -41,12 +41,12 @@ public class ProfileController {
 	}
 
 	@GetMapping("/profile/{id}")
-	public Optional<Profile> findById(@PathVariable int id) {
+	public Optional<Profile> findById(@PathVariable Long id) {
 		return profileService.getProfileById(id);
 	}
 
 	@DeleteMapping("/deleteProfile/{id}")
-	public ResponseEntity<String> deleteProfile(@PathVariable int id) {
+	public ResponseEntity<String> deleteProfile(@PathVariable Long id) {
 		profileService.deleteProfileById(id);
 
 		return new ResponseEntity<>("Profile Successfully Deleted", HttpStatus.OK);

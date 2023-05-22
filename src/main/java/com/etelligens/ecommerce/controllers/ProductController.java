@@ -1,6 +1,7 @@
 package com.etelligens.ecommerce.controllers;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.etelligens.ecommerce.dto.CategoryDTO;
+import com.etelligens.ecommerce.dto.MetaData1DTO;
 import com.etelligens.ecommerce.dto.ProductDto;
-import com.etelligens.ecommerce.dto.SlugDTO;
-import com.etelligens.ecommerce.model.Product;
+import com.etelligens.ecommerce.dto.ProductMetaDataDTO;
 import com.etelligens.ecommerce.service.CategoryService;
 import com.etelligens.ecommerce.service.ProductService;
 import com.google.gson.Gson;
 
 @RestController
-@RequestMapping("/prod")
+@RequestMapping("/toAll")
 public class ProductController {
 
 	@Autowired
@@ -43,47 +44,53 @@ public class ProductController {
 	}
 
 	@GetMapping("/allProducts")
-	public List<Product> findAllProducts() {
+	public List<ProductDto> findAllProducts() {
 		return productService.getAllProducts();
 	}
 
 	@GetMapping("/product/{id}")
-	public Product findProductById(@PathVariable int id) {
+	public ProductDto findProductById(@PathVariable Long id) {
 		return productService.getProductById(id);
 	}
 
 	@GetMapping("/product/category/{id}")
-	public List<Product> findAllProductById(@PathVariable Long id) {
+	public List<ProductDto> findAllProductById(@PathVariable Long id) {
 		try {
 			return productService.getProductByCategoryId(id);
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 
 	}
 
-	@PutMapping("/update")
+	@PutMapping("/product/update")
 	public ProductDto updateProduct(@RequestBody ProductDto product) {
 		return productService.updateProduct(product);
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteProduct(@PathVariable int id) {
+	@DeleteMapping("/deleteProduct/{id}")
+	public String deleteProduct(@PathVariable Long id) {
 		return productService.deleteProductById(id);
 	}
 
-	@PostMapping("/upload")
-	public ResponseEntity<ProductDto> uploadFile(@RequestParam("files") MultipartFile[] files,
-			@RequestParam("product") String product) throws IOException {
-		Gson g = new Gson();
-		ProductDto s = g.fromJson(product, ProductDto.class);
-		System.out.println(s.getName());
+	@PostMapping("/product/upload")
+	public ResponseEntity<ProductDto> uploadFile(@RequestBody ProductDto product) throws IOException {
 
-		return ResponseEntity.status(HttpStatus.OK).body(productService.store(files, s));
+		return new ResponseEntity<>(productService.store(product), HttpStatus.OK);
 
-		// return
-		// ResponseEntity.status(HttpStatus.EXPECTATION_FAILED.value()).body(null);
+	}
+
+	@PostMapping("/addDetail")
+	public ResponseEntity<ProductDto> addMetaDataToProduct(@RequestParam("product") String productId,
+			@RequestParam("productMetaData") String productMetaData, @RequestParam("metaData") String metaData,
+			@RequestParam("files") MultipartFile[] files) {
+		Gson gson = new Gson();
+		Long id = gson.fromJson(productId, Long.class);
+		ProductMetaDataDTO productMetaData1DTO = gson.fromJson(productMetaData, ProductMetaDataDTO.class);
+		MetaData1DTO metaData1DTO = gson.fromJson(metaData, MetaData1DTO.class);
+	
+		return new ResponseEntity<>(productService.addProductDetails(id, productMetaData1DTO, metaData1DTO, files), HttpStatus.OK);
 
 	}
 
@@ -96,17 +103,11 @@ public class ProductController {
 
 	@PostMapping("/newCategory")
 	public ResponseEntity<CategoryDTO> addCategory(@RequestParam("img") MultipartFile file,
-			@RequestParam("category") String data) throws IOException {
-		Gson g = new Gson();
-		CategoryDTO category = g.fromJson(data, CategoryDTO.class);
+			@RequestParam("name") String name) throws IOException {
+
+		CategoryDTO category = new CategoryDTO();
+		category.setName(name);
 
 		return new ResponseEntity<>(categoryService.addCategory(file, category), HttpStatus.OK);
-	}
-
-	@PostMapping("/{id}/addSlug")
-	public ResponseEntity<CategoryDTO> addSlug(@PathVariable Long id, @RequestBody SlugDTO slug) {
-
-		return new ResponseEntity<CategoryDTO>(categoryService.addSlug(id, slug), HttpStatus.OK);
-
 	}
 }

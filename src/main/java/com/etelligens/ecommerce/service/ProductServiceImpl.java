@@ -1,26 +1,36 @@
 package com.etelligens.ecommerce.service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.etelligens.ecommerce.dto.ProductDto;
+import com.etelligens.ecommerce.dto.ProductMetaDataDTO;
 import com.etelligens.ecommerce.dto.ImagesDTO;
+import com.etelligens.ecommerce.dto.MetaData1DTO;
 import com.etelligens.ecommerce.exception.ProductNotExistException;
+import com.etelligens.ecommerce.model.Category;
 import com.etelligens.ecommerce.model.Images;
+import com.etelligens.ecommerce.model.MetaData1;
 import com.etelligens.ecommerce.model.Product;
+import com.etelligens.ecommerce.model.ProductMetaData;
+import com.etelligens.ecommerce.repositories.CategoryRepository;
+import com.etelligens.ecommerce.repositories.MetaData1Repository;
 import com.etelligens.ecommerce.repositories.ProductImagesRepo;
+import com.etelligens.ecommerce.repositories.ProductMetaDataRepository;
 import com.etelligens.ecommerce.repositories.ProductRepo;
 
 @Service
@@ -29,9 +39,18 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	ProductRepo productRepo;
-	
+
+	@Autowired
+	ProductMetaDataRepository productMetaDataRepository;
+
+	@Autowired
+	MetaData1Repository metaData1Repository;
+
 	@Autowired
 	ProductImagesRepo imagesRepo;
+
+	@Autowired
+	CategoryRepository categoryRepository;
 
 	@Autowired
 	ModelMapper mapper;
@@ -43,20 +62,24 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> getAllProducts() {
+	public List<ProductDto> getAllProducts() {
 
-		return productRepo.findAll();
+		return mapper.map(productRepo.findAll(), new TypeToken<List<ProductDto>>() {
+		}.getType());
 	}
 
 	@Override
-	public Product getProductById(int productid) {
-
-		return productRepo.findById(productid)
-				.orElseThrow(() -> new ProductNotExistException("Product is present"));
+	public ProductDto getProductById(Long productid) {
+		Product product = productRepo.findById(productid)
+				.orElseThrow(() -> new ProductNotExistException("Product is not present"));
+		String category = product.getCategory().getName();
+		ProductDto productDto = mapper.map(product, ProductDto.class);
+		productDto.setCategory(category);
+		return productDto;
 	}
 
 	@Override
-	public String deleteProductById(int id) {
+	public String deleteProductById(Long id) {
 		productRepo.deleteById(id);
 		Boolean flag = productRepo.findById(id).isEmpty();
 		if (Boolean.TRUE.equals(flag)) {
@@ -75,52 +98,81 @@ public class ProductServiceImpl implements ProductService {
 				return mapper.map(prod, ProductDto.class);
 			}
 			return null;
-		}catch (ProductNotExistException e) {
+		} catch (ProductNotExistException e) {
 			throw new ProductNotExistException("product is invalid" + product.getId());
 		}
-		
-		
+
 	}
 
 	@Override
-	public ProductDto store(MultipartFile[] files, ProductDto product) throws IOException {
-		
-//		Set<Images> images = new HashSet();
+	public ProductDto store(ProductDto productDto) throws IOException {
+
+		Product product = mapper.map(productDto, Product.class);
+
+		Date d = new Date();
+
+		product.setCreatedAt(new Timestamp(d.getTime()));
+		Category categry = categoryRepository.findByName(productDto.getCategory()).orElseThrow();
+		product.setCategory(categry);
+
+		Product savedProduct = productRepo.save(product);
+
+		return mapper.map(savedProduct, ProductDto.class);
+	}
+
+	@Override
+	public List<ProductDto> getProductByCategoryId(Long id) {
+		List<ProductDto> products = new ArrayList<>();
+		try {
+			products = mapper.map(productRepo.findAllByCategoryId(id), new TypeToken<List<ProductDto>>() {
+			}.getType());
+			
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return products;
+
+	}
+
+	@Override
+	public ProductDto addProductDetails(Long id, ProductMetaDataDTO productMetaData1DTO, MetaData1DTO metaData1DTO,
+			MultipartFile[] files) {
+		ProductMetaData productMetaData = mapper.map(productMetaData1DTO, ProductMetaData.class);
+		MetaData1 metaData1 = mapper.map(metaData1DTO, MetaData1.class);
 		Set<ImagesDTO> productImagesDTOs = new HashSet<>();
 		Arrays.asList(files).stream().forEach(file -> {
 			try {
-//			String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-			byte[] img = file.getBytes();
-			ImagesDTO productImagesDTO = new ImagesDTO();
-			productImagesDTO.setImg(img);
-			productImagesDTOs.add(productImagesDTO);
+				byte[] img = file.getBytes();
+				ImagesDTO productImagesDTO = new ImagesDTO();
+				productImagesDTO.setImg(img);
+				productImagesDTOs.add(productImagesDTO);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		});
-		
-		 product.setImages(productImagesDTOs);
-		 Product product1 = mapper.map(product, Product.class);
-		 Optional<Product> prod = productRepo.findById(product.getId());
-		 if(!prod.isEmpty()) {
-			 prod.get().getImages().add((Images) productImagesDTOs);
-			 return mapper.map(productRepo.save(prod.get()), ProductDto.class);
-		 }
-		 return mapper.map(productRepo.save(product1), ProductDto.class);
-	}
 
-	@Override
-	public List<Product> getProductByCategoryId(Long id) {
-		List<Product> products = new ArrayList<>();
-		try {
-			products = productRepo.findAllByCategoryId(id);
-		}catch (Exception e) {
-			e.getMessage();
+		Images images = mapper.map(productImagesDTOs, Images.class);
+		Product savedProduct = productRepo.findById(id).orElseThrow();
+		
+		if (savedProduct != null) {
+			String category =	savedProduct.getCategory().getName();
+			productMetaData.setProduct(savedProduct);
+			ProductMetaData productData = productMetaDataRepository.save(productMetaData);
+			Optional<ProductMetaData> optionalProduct = Optional.ofNullable(productData);
+			optionalProduct.ifPresent(prod -> {
+				metaData1.setProductMetaData(prod);
+				metaData1.getImages().add(images);
+				metaData1Repository.save(metaData1);
+			});
+			
+		ProductDto	productDto = mapper.map(savedProduct, ProductDto.class);
+		productDto.setCategory(category);
+		return productDto;
 		}
-		products.stream().forEach((d)->System.out.println(d.getId()));
 		
-		return products;
 		
+		return null;
+
 	}
 
 }

@@ -16,10 +16,10 @@ import com.etelligens.ecommerce.model.Profile;
 public interface ProfileService {
 	public ProfileDTO addProfile(MultipartFile file ,ProfileDTO s) throws IOException;
 
-	public String deleteProfileById(int id);
+	public String deleteProfileById(Long id);
 
 	public ProfileDTO updateProfile(MultipartFile file, ProfileDTO s) throws IOException;
 
-	public Optional<Profile> getProfileById(int id);
+	public Optional<Profile> getProfileById(Long id);
 
 }

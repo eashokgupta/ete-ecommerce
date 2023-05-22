@@ -1,9 +1,9 @@
 package com.etelligens.ecommerce.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +21,10 @@ public class CartServiceImpl implements CartService {
 	ModelMapper mapper;
 
 	@Override
-	public List<Cart> getAllCartItem() {
+	public List<CartDTO> getAllCartItem() {
 
-		return cartRepo.findAll();
+		return mapper.map(cartRepo.findAll(), new TypeToken<List<CartDTO>>() {
+		}.getType());
 	}
 
 	@Override
@@ -33,10 +34,10 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-		public String deleteCartProductById(int id) {
+		public String deleteCartProductById(Long id) {
 			cartRepo.deleteById(id);
 			Boolean flag = cartRepo.findById(id).isEmpty();
-			if (flag) {
+			if (Boolean.TRUE.equals(flag)) {
 				return "Item Successfully Deleted";
 			}
 			return "Not Deleted";
@@ -47,14 +48,17 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public CartDTO updateCart(CartDTO cart) {
 	Boolean cart1 =	cartRepo.findById(cart.getId()).isEmpty();
-	Cart updateCart = mapper.map(cart, Cart.class);
-	updateCart = cartRepo.save(updateCart);
-	return mapper.map(updateCart, CartDTO.class);
+	if(Boolean.FALSE.equals(cart1)) {
+		Cart updateCart = mapper.map(cart, Cart.class);
+		updateCart = cartRepo.save(updateCart);
+		return mapper.map(updateCart, CartDTO.class);
+	}
+	return null;
 	}
 
 	@Override
-	public Optional<Cart> getCartProductById(int productId) {
-		return cartRepo.findById(productId);
+	public CartDTO getCartProductById(int productId) {
+		return mapper.map(cartRepo.findById(productId).orElseThrow(), CartDTO.class);
 	
 
 	}
