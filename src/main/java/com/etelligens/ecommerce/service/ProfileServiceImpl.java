@@ -33,7 +33,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public String deleteProfileById(int id) {
+	public String deleteProfileById(Long id) {
 		profileRepo.deleteById(id);
 		Boolean flag = profileRepo.findById(id).isEmpty();
 		if (Boolean.TRUE.equals(flag)) {
@@ -60,7 +60,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public Optional<Profile> getProfileById(int id) {
+	public Optional<Profile> getProfileById(Long id) {
 
 		return profileRepo.findById(id);
 	}

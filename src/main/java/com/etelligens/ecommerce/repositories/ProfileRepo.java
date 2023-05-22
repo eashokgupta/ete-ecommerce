@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.etelligens.ecommerce.model.Profile;
 
 @Component
-public interface ProfileRepo extends JpaRepository<Profile, Integer> {
-	public Optional<Profile> findById(Integer id);
+public interface ProfileRepo extends JpaRepository<Profile, Long> {
+	public Optional<Profile> findById(Long id);
 
 }

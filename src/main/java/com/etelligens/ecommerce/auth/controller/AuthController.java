@@ -3,7 +3,6 @@ package com.etelligens.ecommerce.auth.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,8 +33,6 @@ public class AuthController {
 	@Autowired
 	ValidateService validateService;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
 
 	/*
 	 * @param userInfo - to add/register new user

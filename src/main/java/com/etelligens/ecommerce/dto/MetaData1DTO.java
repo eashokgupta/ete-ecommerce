@@ -1,21 +1,17 @@
 package com.etelligens.ecommerce.dto;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImagesDTO {
+public class MetaData1DTO {
 	
-	private int id;
-	
+	private Long id;
+
 	private String color;
-	
-	private byte[] img;
-	
+
+	private int quantity;
 }

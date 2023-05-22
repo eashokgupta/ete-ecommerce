@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.etelligens.ecommerce.model.Cart;
 
 @Component
-public interface CartRepo  extends JpaRepository<Cart, Integer>{
+public interface CartRepo  extends JpaRepository<Cart, Long>{
 	
 	public Optional<Cart> findById(Integer productId);
 }

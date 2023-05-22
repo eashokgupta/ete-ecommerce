@@ -1,7 +1,6 @@
 package com.etelligens.ecommerce.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,62 +18,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Product implements Serializable {
+public class ProductMetaData implements Serializable{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7556208287679752588L;
+	private static final long serialVersionUID = 4557857527125338925L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Integer quantity;
-
-	private String name;
-
-	private String shortDescription;
-
-	private String description;
-
-	private String color;
-
-	private String sku;
-
-	private String upc;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id")
-	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private Category category;
-
-	@OneToMany(mappedBy = "product")
-	private List<ProductMetaData> productMetaData;
+	private String size;
 	
-	private String brand;
-
-	private float rating;
-
-	private Offer offer;
-
-	private String url;
-
-	private String label;
-
-	private Double price;
-
-	private Boolean visibility;
-
-	private Boolean b2b;
-
-	private Timestamp createdAt;
-
-	private Timestamp updatedAt;
-
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	private Product product;
+	
+	@OneToMany(mappedBy = "productMetaData")
+	private List<MetaData1> metaData;
+	
 }
