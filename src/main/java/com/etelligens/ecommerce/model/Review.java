@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,15 +42,16 @@ public class Review implements Serializable{
 
 	private int rating;
 
-	@Lob
-	private List<byte[]> imgs = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name ="review_id", nullable = true , referencedColumnName = "id")
+    private List<ReviewImages> reviewImages;
 	
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private User user;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", referencedColumnName = "id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Product product;

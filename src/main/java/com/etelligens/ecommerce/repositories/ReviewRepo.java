@@ -6,13 +6,13 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.etelligens.ecommerce.model.Address;
+import com.etelligens.ecommerce.model.Review;
 
 @Repository
-public interface AddressRepo extends JpaRepository<Address, Long> {
+public interface ReviewRepo extends JpaRepository<Review, Long> {
 	
-	public List<Address> findByUserEmail(String id);
-
-	public Optional<Address> findById(long addressId);
+	public List<Review> findByProductId(Long productId);
+	
+	public Optional<Review> findById(Long id);
 
 }

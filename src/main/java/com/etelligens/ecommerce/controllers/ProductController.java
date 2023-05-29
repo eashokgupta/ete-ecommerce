@@ -110,4 +110,12 @@ public class ProductController {
 
 		return new ResponseEntity<>(categoryService.addCategory(file, category), HttpStatus.OK);
 	}
+	
+	@GetMapping("/search/{value}")
+	public ResponseEntity<List<ProductDto>> searchProducts(@PathVariable("value") String value){
+		List<ProductDto> prList = productService.searchProducts(value);
+		System.out.println(prList);
+		return new ResponseEntity<>(prList, HttpStatus.OK);
+		
+	}
 }

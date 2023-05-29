@@ -126,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			products = mapper.map(productRepo.findAllByCategoryId(id), new TypeToken<List<ProductDto>>() {
 			}.getType());
-			
+
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -139,6 +139,36 @@ public class ProductServiceImpl implements ProductService {
 			MultipartFile[] files) {
 		ProductMetaData productMetaData = mapper.map(productMetaData1DTO, ProductMetaData.class);
 		MetaData1 metaData1 = mapper.map(metaData1DTO, MetaData1.class);
+		Product savedProduct = productRepo.findById(id).orElseThrow();
+		List<Images> images = addImages(files);
+
+		if (savedProduct != null) {
+			String category = savedProduct.getCategory().getName();
+			Optional<ProductMetaData> prod = productMetaDataRepository.findByProductIdAndColor(id,
+					productMetaData1DTO.getColor());
+			if (!prod.isEmpty()) {
+				metaData1.setProductMetaData(prod.get());
+				metaData1Repository.save(metaData1);
+				ProductDto productDto = mapper.map(savedProduct, ProductDto.class);
+				productDto.setCategory(category);
+				return productDto;
+
+			} else {
+				productMetaData.setProduct(savedProduct);
+				productMetaData.setImages(images);
+				ProductMetaData productData = productMetaDataRepository.save(productMetaData);
+				metaData1.setProductMetaData(productData);
+				metaData1Repository.save(metaData1);
+				ProductDto productDto = mapper.map(savedProduct, ProductDto.class);
+				productDto.setCategory(category);
+				return productDto;
+			}
+		}
+		return null;
+	}
+
+	private List<Images> addImages(MultipartFile[] files) {
+
 		Set<ImagesDTO> productImagesDTOs = new HashSet<>();
 		Arrays.asList(files).stream().forEach(file -> {
 			try {
@@ -151,28 +181,16 @@ public class ProductServiceImpl implements ProductService {
 			}
 		});
 
-		Images images = mapper.map(productImagesDTOs, Images.class);
-		Product savedProduct = productRepo.findById(id).orElseThrow();
-		
-		if (savedProduct != null) {
-			String category =	savedProduct.getCategory().getName();
-			productMetaData.setProduct(savedProduct);
-			ProductMetaData productData = productMetaDataRepository.save(productMetaData);
-			Optional<ProductMetaData> optionalProduct = Optional.ofNullable(productData);
-			optionalProduct.ifPresent(prod -> {
-				metaData1.setProductMetaData(prod);
-				metaData1.getImages().add(images);
-				metaData1Repository.save(metaData1);
-			});
-			
-		ProductDto	productDto = mapper.map(savedProduct, ProductDto.class);
-		productDto.setCategory(category);
-		return productDto;
-		}
-		
-		
-		return null;
+		return mapper.map(productImagesDTOs, new TypeToken<Set<Images>>() {
+		}.getType());
+	}
 
+	@Override
+	public List<ProductDto> searchProducts(String value) {
+		List<Product> products = productRepo.getProducts(value);
+		
+		return mapper.map(products, new TypeToken<List<ProductDto>>() {
+		}.getType());
 	}
 
 }

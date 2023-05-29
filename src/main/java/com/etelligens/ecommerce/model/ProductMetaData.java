@@ -1,10 +1,14 @@
 package com.etelligens.ecommerce.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +38,12 @@ public class ProductMetaData implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String size;
+	private String color;
+	
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@JoinColumn(name = "product_meta_data_id", referencedColumnName = "id")
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	private List<Images> images = new ArrayList<>();
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")

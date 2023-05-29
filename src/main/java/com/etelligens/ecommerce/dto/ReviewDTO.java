@@ -1,6 +1,5 @@
 package com.etelligens.ecommerce.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +19,9 @@ public class ReviewDTO {
 	
 	private int rating;
 	
-	private List<byte[]> imgs = new ArrayList<>();
+	private byte[] userPhoto;
+	
+	private List<ReviewImagesDTO> reviewImages;
 	
 	private String username;
 	

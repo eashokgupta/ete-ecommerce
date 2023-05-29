@@ -44,7 +44,7 @@ public class Address implements Serializable {
 	private String type;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+	@JoinColumn(name = "user_email", nullable = false, referencedColumnName = "email")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private User user;
 

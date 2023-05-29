@@ -21,9 +21,9 @@ public class CartServiceImpl implements CartService {
 	ModelMapper mapper;
 
 	@Override
-	public List<CartDTO> getAllCartItem() {
+	public List<CartDTO> getAllCartItem(String userId) {
 
-		return mapper.map(cartRepo.findAll(), new TypeToken<List<CartDTO>>() {
+		return mapper.map(cartRepo.findByUserId(userId), new TypeToken<List<CartDTO>>() {
 		}.getType());
 	}
 
@@ -34,20 +34,19 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-		public String deleteCartProductById(Long id) {
-			cartRepo.deleteById(id);
+		public String deleteCartProductById(String userId, Long id) {
+			cartRepo.deleteByIdAndUserId(userId,id);
 			Boolean flag = cartRepo.findById(id).isEmpty();
 			if (Boolean.TRUE.equals(flag)) {
 				return "Item Successfully Deleted";
 			}
 			return "Not Deleted";
 		}
-
 	
 
 	@Override
 	public CartDTO updateCart(CartDTO cart) {
-	Boolean cart1 =	cartRepo.findById(cart.getId()).isEmpty();
+	Boolean cart1 =	cartRepo.findByUserId(cart.getUserId()).isEmpty();
 	if(Boolean.FALSE.equals(cart1)) {
 		Cart updateCart = mapper.map(cart, Cart.class);
 		updateCart = cartRepo.save(updateCart);
@@ -57,9 +56,7 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public CartDTO getCartProductById(int productId) {
+	public CartDTO getCartProductById(Long productId) {
 		return mapper.map(cartRepo.findById(productId).orElseThrow(), CartDTO.class);
-	
-
 	}
 }
