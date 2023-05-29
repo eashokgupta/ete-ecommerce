@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.etelligens.ecommerce.auth.service.UserService;
 import com.etelligens.ecommerce.dto.CartDTO;
 import com.etelligens.ecommerce.service.CartService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -24,6 +27,9 @@ public class CartController {
 
 	@Autowired
 	CartService cartService;
+	
+	@Autowired
+	UserService userService;
 
 	@PostMapping("/addToCart")
 	public ResponseEntity<CartDTO> addToCart(@RequestBody CartDTO cart) {
@@ -38,19 +44,21 @@ public class CartController {
 		return new ResponseEntity<>(updateItem, HttpStatus.OK);
 	}
 	@DeleteMapping("/deleteCart/{id}")
-	public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
-		    cartService.deleteCartProductById(id);
+	public ResponseEntity<String> deleteProduct(HttpServletRequest request,@PathVariable Long id) {
+		String userId = userService.getUserName(request);
+		    cartService.deleteCartProductById(userId,id);
 		return new ResponseEntity<>("Item Deleted Successfully", HttpStatus.OK);
 	}
 
 	@GetMapping("/cart/{id}")
-	public CartDTO findCartProductById(@PathVariable int id) {
+	public CartDTO getAllProductFromCart(@PathVariable Long id) {
 		return cartService.getCartProductById(id);
 	}
 
 	@GetMapping("/cartItems")
-	public ResponseEntity<List<CartDTO>> findAllCartItem() {
-		List<CartDTO> items = cartService.getAllCartItem();
+	public ResponseEntity<List<CartDTO>> findAllCartItem(HttpServletRequest request) {
+		String userId = userService.getUserName(request);
+		List<CartDTO> items = cartService.getAllCartItem(userId);
 		return new ResponseEntity<>(items, HttpStatus.OK);
 
 	}

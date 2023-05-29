@@ -17,7 +17,7 @@ public class AddressDTO {
 	private String firstName;
 	private String lastName;
 	private String streetAddress;
-	private String streetAddress2;
+	private String streetAddress1;
 	private Long phoneNumber;
 	private String city;
 	private String stateProvinceRegion;

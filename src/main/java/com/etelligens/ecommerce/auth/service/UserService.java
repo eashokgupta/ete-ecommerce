@@ -6,6 +6,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import com.etelligens.ecommerce.auth.exception.LoginException;
 import com.etelligens.ecommerce.auth.model.AuthenticationRequest;
 import com.etelligens.ecommerce.auth.model.User;
 import com.etelligens.ecommerce.auth.repositories.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class UserService {
@@ -87,4 +91,15 @@ public class UserService {
 		
 	}
 
+	public String getUserName(HttpServletRequest request) {
+		String authHeader = request.getHeader("Authorization");
+	     String token = null;
+	     String userId = null;
+	     if (authHeader != null && authHeader.startsWith("Bearer ")) {
+	         token = authHeader.substring(7);
+	         userId = jwtUtil.extractUsername(token);
+	     }
+		return userId;
+		
+	}
 }

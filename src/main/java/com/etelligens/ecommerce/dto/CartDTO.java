@@ -12,9 +12,9 @@ package com.etelligens.ecommerce.dto;
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public class CartDTO {
-		private Integer id;
-	    private Integer productId;
-	    private Integer userId;
+		private Long id;
+	    private Long productId;
+	    private String userId;
 	    private Integer quantity;
 	    private Integer price;
 	    private Timestamp createdAt;

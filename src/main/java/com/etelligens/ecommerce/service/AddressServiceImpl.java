@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.etelligens.ecommerce.auth.model.User;
 import com.etelligens.ecommerce.auth.repositories.UserRepository;
 import com.etelligens.ecommerce.dto.AddressDTO;
-import com.etelligens.ecommerce.exception.AddressNotFoundException;
 import com.etelligens.ecommerce.model.Address;
 import com.etelligens.ecommerce.repositories.AddressRepo;
 
@@ -37,21 +36,12 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public List<AddressDTO> getAddresses() {
-		return mapper.map(addressRepo.findAll(), new TypeToken<List<AddressDTO>>() {
+	public List<AddressDTO> getAllAddresses(String userId) {
+		
+		return mapper.map(addressRepo.findByUserEmail(userId), new TypeToken<List<AddressDTO>>() {
 		}.getType());
 	}
-
 	
-
-	@Override
-	public AddressDTO getAddress(Long addressId) {
-		Address address = addressRepo.findById(addressId)
-				.orElseThrow(() -> new AddressNotFoundException("Address is present"));
-
-		return mapper.map(address, AddressDTO.class);
-	}
-
 	@Override
 	public AddressDTO updateAddress(AddressDTO address) {
 		

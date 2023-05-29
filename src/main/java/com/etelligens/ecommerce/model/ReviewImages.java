@@ -1,49 +1,34 @@
 package com.etelligens.ecommerce.model;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Profile")
-public class Profile implements Serializable{
-
+public class ReviewImages implements Serializable{
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2418408984979803239L;
-	
+	private static final long serialVersionUID = 3863878830841484727L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long profileId;
-	private String firstName;
-	private String lastName;
-	private String gender;
-	private Long phoneNumber;
-	private String email;
-	private String password;
-	private Date birthday;
+	private long id;
 	
 	@Lob
-	private byte[] profilePhoto;
-	
-	
-	
+	private byte[] img;
 
 }
-

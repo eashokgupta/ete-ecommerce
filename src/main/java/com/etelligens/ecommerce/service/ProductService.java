@@ -31,4 +31,5 @@ public interface ProductService {
 
 	public ProductDto addProductDetails(Long id, ProductMetaDataDTO productMetaData1DTO, MetaData1DTO metaData1DTO,
 			MultipartFile[] files);
+	public List<ProductDto> searchProducts(String value);
 }

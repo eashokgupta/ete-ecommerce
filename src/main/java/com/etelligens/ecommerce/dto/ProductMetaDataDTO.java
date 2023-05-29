@@ -13,7 +13,9 @@ public class ProductMetaDataDTO {
 	
 	private Long id;
 	
-	private String size;
+	private String color;
+	
+	private List<ImagesDTO> images;
 	
 	private List<MetaData1DTO> metaData;
 	

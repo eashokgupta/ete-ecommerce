@@ -34,14 +34,9 @@ public class MetaData1 implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 
 	
-	private String color;
+	private String size;
 
 	private int quantity;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "meta_data_id", referencedColumnName = "id")
-	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private Set<Images> images = new HashSet<>();
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_meta_data_id", nullable = false, referencedColumnName = "id")

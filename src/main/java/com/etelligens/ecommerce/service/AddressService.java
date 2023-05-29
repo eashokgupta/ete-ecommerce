@@ -15,9 +15,7 @@ public interface AddressService {
 
 	AddressDTO createAddress(String id, AddressDTO addressDTO);
 
-	List<AddressDTO> getAddresses();
-
-	AddressDTO getAddress(Long addressId);
+	List<AddressDTO> getAllAddresses(String userId);
 
 	AddressDTO updateAddress(AddressDTO address);
 

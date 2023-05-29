@@ -12,13 +12,13 @@ import com.etelligens.ecommerce.dto.CartDTO;
 public interface CartService {
 	public CartDTO addToCart(CartDTO cart);
 
-	public String deleteCartProductById(Long id);
+	public String deleteCartProductById(String userId,Long id);
 
 	public CartDTO updateCart(CartDTO cart);
 
-	public List<CartDTO> getAllCartItem();
+	public List<CartDTO> getAllCartItem(String userId);
 
-	public CartDTO getCartProductById(int productId);
+	public CartDTO getCartProductById(Long productId);
 	
 	
 }
