@@ -31,7 +31,7 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
 		return http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/auth/registration", "/auth/login", "/toAll/**").permitAll().and()
+				.requestMatchers("/auth/registration", "/auth/login", "/toAll/**","/").permitAll().and()
 				.authorizeHttpRequests().requestMatchers("/ecommerce/**").authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider())
