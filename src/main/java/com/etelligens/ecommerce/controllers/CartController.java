@@ -32,15 +32,17 @@ public class CartController {
 	UserService userService;
 
 	@PostMapping("/addToCart")
-	public ResponseEntity<CartDTO> addToCart(@RequestBody CartDTO cart) {
-		CartDTO cart2 = cartService.addToCart(cart);
+	public ResponseEntity<CartDTO> addToCart(HttpServletRequest request, @RequestBody CartDTO cart) {
+		String userId = userService.getUserName(request);
+		CartDTO cart2 = cartService.addToCart(userId,cart);
 		return new ResponseEntity<>(cart2, HttpStatus.OK);
 
 	}
 
 	@PutMapping("/updateCart")
-	public ResponseEntity<CartDTO> updateCart(@RequestBody CartDTO cart) {
-		CartDTO updateItem = cartService.updateCart(cart);
+	public ResponseEntity<CartDTO> updateCart(HttpServletRequest request, @RequestBody CartDTO cart) {
+		String userId = userService.getUserName(request);
+		CartDTO updateItem = cartService.updateCart(userId,cart);
 		return new ResponseEntity<>(updateItem, HttpStatus.OK);
 	}
 	@DeleteMapping("/deleteCart/{id}")
@@ -51,8 +53,9 @@ public class CartController {
 	}
 
 	@GetMapping("/cart/{id}")
-	public CartDTO getAllProductFromCart(@PathVariable Long id) {
-		return cartService.getCartProductById(id);
+	public ResponseEntity<CartDTO> getAllProductFromCart(HttpServletRequest request, @PathVariable Long id) {
+		String userId = userService.getUserName(request);
+		return new ResponseEntity<CartDTO>(cartService.getCartProductById(userId, id), HttpStatus.OK);
 	}
 
 	@GetMapping("/cartItems")

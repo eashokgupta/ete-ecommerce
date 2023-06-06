@@ -10,15 +10,15 @@ import com.etelligens.ecommerce.dto.CartDTO;
 @Component
 @Service
 public interface CartService {
-	public CartDTO addToCart(CartDTO cart);
+	public CartDTO addToCart(String userId, CartDTO cart);
 
 	public String deleteCartProductById(String userId,Long id);
 
-	public CartDTO updateCart(CartDTO cart);
+	public CartDTO updateCart(String userId, CartDTO cart);
 
 	public List<CartDTO> getAllCartItem(String userId);
 
-	public CartDTO getCartProductById(Long productId);
+	public CartDTO getCartProductById(String userId, Long id);
 	
 	
 }

@@ -2,9 +2,7 @@ package com.etelligens.ecommerce.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -40,7 +38,7 @@ public class ProductMetaData implements Serializable{
 
 	private String color;
 	
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_meta_data_id", referencedColumnName = "id")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private List<Images> images = new ArrayList<>();
@@ -50,7 +48,7 @@ public class ProductMetaData implements Serializable{
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Product product;
 	
-	@OneToMany(mappedBy = "productMetaData")
+	@OneToMany(mappedBy = "productMetaData",fetch = FetchType.LAZY)
 	private List<MetaData1> metaData;
 	
 }

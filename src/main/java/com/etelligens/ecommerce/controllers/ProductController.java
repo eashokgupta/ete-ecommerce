@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.etelligens.ecommerce.dto.CategoryDTO;
 import com.etelligens.ecommerce.dto.MetaData1DTO;
-import com.etelligens.ecommerce.dto.ProductDto;
+import com.etelligens.ecommerce.dto.ProductDTO;
 import com.etelligens.ecommerce.dto.ProductMetaDataDTO;
 import com.etelligens.ecommerce.service.CategoryService;
 import com.etelligens.ecommerce.service.ProductService;
@@ -36,25 +36,25 @@ public class ProductController {
 	@Autowired
 	CategoryService categoryService;
 
-	@PostMapping("/addProduct")
-	public ProductDto addProduct(@RequestBody ProductDto product) {
+	@PostMapping("/product/upload")
+	public ResponseEntity<ProductDTO> addNewProduct(@RequestBody ProductDTO product) throws IOException {
 
-		return productService.saveProduct(product);
+		return new ResponseEntity<>(productService.addNewProduct(product), HttpStatus.OK);
 
 	}
 
 	@GetMapping("/allProducts")
-	public List<ProductDto> findAllProducts() {
+	public List<ProductDTO> findAllProducts() {
 		return productService.getAllProducts();
 	}
 
 	@GetMapping("/product/{id}")
-	public ProductDto findProductById(@PathVariable Long id) {
+	public ProductDTO findProductById(@PathVariable Long id) {
 		return productService.getProductById(id);
 	}
 
 	@GetMapping("/product/category/{id}")
-	public List<ProductDto> findAllProductById(@PathVariable Long id) {
+	public List<ProductDTO> findAllProductById(@PathVariable Long id) {
 		try {
 			return productService.getProductByCategoryId(id);
 		} catch (Exception e) {
@@ -65,7 +65,7 @@ public class ProductController {
 	}
 
 	@PutMapping("/product/update")
-	public ProductDto updateProduct(@RequestBody ProductDto product) {
+	public ProductDTO updateProduct(@RequestBody ProductDTO product) {
 		return productService.updateProduct(product);
 	}
 
@@ -74,23 +74,17 @@ public class ProductController {
 		return productService.deleteProductById(id);
 	}
 
-	@PostMapping("/product/upload")
-	public ResponseEntity<ProductDto> uploadFile(@RequestBody ProductDto product) throws IOException {
-
-		return new ResponseEntity<>(productService.store(product), HttpStatus.OK);
-
-	}
-
 	@PostMapping("/addDetail")
-	public ResponseEntity<ProductDto> addMetaDataToProduct(@RequestParam("product") String productId,
+	public ResponseEntity<ProductDTO> addMetaDataToProduct(@RequestParam("product") String productId,
 			@RequestParam("productMetaData") String productMetaData, @RequestParam("metaData") String metaData,
-			@RequestParam("files") MultipartFile[] files) {
+			@RequestParam("files") MultipartFile[] files, Long offerId) {
 		Gson gson = new Gson();
 		Long id = gson.fromJson(productId, Long.class);
 		ProductMetaDataDTO productMetaData1DTO = gson.fromJson(productMetaData, ProductMetaDataDTO.class);
 		MetaData1DTO metaData1DTO = gson.fromJson(metaData, MetaData1DTO.class);
-	
-		return new ResponseEntity<>(productService.addProductDetails(id, productMetaData1DTO, metaData1DTO, files), HttpStatus.OK);
+
+		return new ResponseEntity<>(productService.addProductDetails(id, productMetaData1DTO, metaData1DTO, files, id),
+				HttpStatus.OK);
 
 	}
 
@@ -110,12 +104,28 @@ public class ProductController {
 
 		return new ResponseEntity<>(categoryService.addCategory(file, category), HttpStatus.OK);
 	}
-	
+
+	@PutMapping("/updateCategory")
+	public ResponseEntity<CategoryDTO> updateCategory(@RequestParam("img") MultipartFile file,
+			@RequestParam("name") String name) throws IOException {
+
+		CategoryDTO category = new CategoryDTO();
+		category.setName(name);
+
+		return new ResponseEntity<>(categoryService.updateCategory(file, category), HttpStatus.OK);
+	}
+
 	@GetMapping("/search/{value}")
-	public ResponseEntity<List<ProductDto>> searchProducts(@PathVariable("value") String value){
-		List<ProductDto> prList = productService.searchProducts(value);
-		System.out.println(prList);
+	public ResponseEntity<List<ProductDTO>> searchProducts(@PathVariable("value") String value) {
+		List<ProductDTO> prList = productService.searchProducts(value);
 		return new ResponseEntity<>(prList, HttpStatus.OK);
-		
+
+	}
+	
+	@GetMapping("/filter")
+	public ResponseEntity<List<ProductDTO>> filterProducts(@RequestParam("minPrice") Double minPrice,
+			@RequestParam("maxPrice") Double maxPrice) {
+		List<ProductDTO> filter = productService.filterProducts(minPrice, maxPrice);
+		return new ResponseEntity<>(filter, HttpStatus.OK);
 	}
 }

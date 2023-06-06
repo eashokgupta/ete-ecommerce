@@ -14,7 +14,6 @@ package com.etelligens.ecommerce.dto;
 	public class CartDTO {
 		private Long id;
 	    private Long productId;
-	    private String userId;
 	    private Integer quantity;
 	    private Integer price;
 	    private Timestamp createdAt;

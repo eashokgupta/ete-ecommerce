@@ -14,5 +14,7 @@ public interface CategoryService {
 	public List<CategoryDTO> getAllCategories();
 	
 	public CategoryDTO addCategory(MultipartFile file, CategoryDTO category) throws IOException;
+	
+	public CategoryDTO updateCategory(MultipartFile file, CategoryDTO category) throws IOException;
 
 }

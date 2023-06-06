@@ -6,6 +6,7 @@ import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,7 @@ public class Images implements Serializable{
 	private int id;
 	
 	@Lob
+	@Column(columnDefinition = "LONGBLOB")
 	private byte[] img;
 	
 	private Date createdAt;
@@ -39,7 +41,7 @@ public class Images implements Serializable{
 	private Date updatedAt;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_meta_data_id", nullable = false, referencedColumnName = "id")
+	@JoinColumn(name = "product_meta_data_id", referencedColumnName = "id")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private ProductMetaData productMetaData;
 

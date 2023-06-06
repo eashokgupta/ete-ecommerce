@@ -28,7 +28,7 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public CartDTO addToCart(CartDTO cart) {
+	public CartDTO addToCart(String userId, CartDTO cart) {
 		Cart addItemToCart = mapper.map(cart, Cart.class);
 		return mapper.map(cartRepo.save(addItemToCart), CartDTO.class);
 	}
@@ -45,8 +45,8 @@ public class CartServiceImpl implements CartService {
 	
 
 	@Override
-	public CartDTO updateCart(CartDTO cart) {
-	Boolean cart1 =	cartRepo.findByUserId(cart.getUserId()).isEmpty();
+	public CartDTO updateCart(String userId, CartDTO cart) {
+	Boolean cart1 =	cartRepo.findByUserId(userId).isEmpty();
 	if(Boolean.FALSE.equals(cart1)) {
 		Cart updateCart = mapper.map(cart, Cart.class);
 		updateCart = cartRepo.save(updateCart);
@@ -56,7 +56,7 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public CartDTO getCartProductById(Long productId) {
+	public CartDTO getCartProductById(String userId, Long productId) {
 		return mapper.map(cartRepo.findById(productId).orElseThrow(), CartDTO.class);
 	}
 }

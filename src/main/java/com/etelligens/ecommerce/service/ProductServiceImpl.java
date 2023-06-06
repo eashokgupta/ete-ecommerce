@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.etelligens.ecommerce.dto.ProductDto;
+import com.etelligens.ecommerce.dto.ProductDTO;
 import com.etelligens.ecommerce.dto.ProductMetaDataDTO;
 import com.etelligens.ecommerce.dto.ImagesDTO;
 import com.etelligens.ecommerce.dto.MetaData1DTO;
@@ -25,10 +25,12 @@ import com.etelligens.ecommerce.exception.ProductNotExistException;
 import com.etelligens.ecommerce.model.Category;
 import com.etelligens.ecommerce.model.Images;
 import com.etelligens.ecommerce.model.MetaData1;
+import com.etelligens.ecommerce.model.Offer;
 import com.etelligens.ecommerce.model.Product;
 import com.etelligens.ecommerce.model.ProductMetaData;
 import com.etelligens.ecommerce.repositories.CategoryRepository;
 import com.etelligens.ecommerce.repositories.MetaData1Repository;
+import com.etelligens.ecommerce.repositories.OfferRepository;
 import com.etelligens.ecommerce.repositories.ProductImagesRepo;
 import com.etelligens.ecommerce.repositories.ProductMetaDataRepository;
 import com.etelligens.ecommerce.repositories.ProductRepo;
@@ -53,29 +55,86 @@ public class ProductServiceImpl implements ProductService {
 	CategoryRepository categoryRepository;
 
 	@Autowired
+	OfferRepository offerRepository;
+
+	@Autowired
 	ModelMapper mapper;
 
 	@Override
-	public ProductDto saveProduct(ProductDto product) {
-		Product pro = mapper.map(product, Product.class);
-		return mapper.map(productRepo.save(pro), ProductDto.class);
+	public ProductDTO addNewProduct(ProductDTO productDTO) {
+
+		Product product = mapper.map(productDTO, Product.class);
+
+		Date d = new Date();
+
+		product.setCreatedAt(new Timestamp(d.getTime()));
+		Category categry = categoryRepository.findByName(productDTO.getCategory()).orElseThrow();
+		product.setCategory(categry);
+
+		Optional<Offer> offer = offerRepository.findById(productDTO.getOfferId());
+
+		boolean off = offer.isPresent();
+
+		if (off && "%".equals(offer.get().getAmountType())) {
+			Offer offer1 = offer.get();
+			Double price = productDTO.getPrice();
+			Double priceAfterDiscount = price * (offer1.getAmount() / 100);
+			productDTO.setPriceAfterDiscount(priceAfterDiscount);
+			product.setPriceAfterDiscount(priceAfterDiscount);
+		}
+		Product savedProduct = productRepo.save(product);
+
+		return mapper.map(savedProduct, ProductDTO.class);
 	}
 
 	@Override
-	public List<ProductDto> getAllProducts() {
+	public ProductDTO addProductDetails(Long id, ProductMetaDataDTO productMetaData1DTO, MetaData1DTO metaData1DTO,
+			MultipartFile[] files, Long offerId) {
+		ProductMetaData productMetaData = mapper.map(productMetaData1DTO, ProductMetaData.class);
+		MetaData1 metaData1 = mapper.map(metaData1DTO, MetaData1.class);
+		Product savedProduct = productRepo.findById(id).orElseThrow();
+		List<Images> images = addImages(files);
 
-		return mapper.map(productRepo.findAll(), new TypeToken<List<ProductDto>>() {
+		if (savedProduct != null) {
+			String category = savedProduct.getCategory().getName();
+			Optional<ProductMetaData> prod = productMetaDataRepository.findByProductIdAndColor(id,
+					productMetaData1DTO.getColor());
+			if (!prod.isEmpty()) {
+				metaData1.setProductMetaData(prod.get());
+				metaData1Repository.save(metaData1);
+				ProductDTO productDTO = mapper.map(savedProduct, ProductDTO.class);
+				productDTO.setCategory(category);
+				return productDTO;
+
+			} else {
+				productMetaData.setProduct(savedProduct);
+				productMetaData.setImages(images);
+				ProductMetaData productData = productMetaDataRepository.save(productMetaData);
+				metaData1.setProductMetaData(productData);
+				metaData1Repository.save(metaData1);
+				ProductDTO productDTO = mapper.map(savedProduct, ProductDTO.class);
+				productDTO.setCategory(category);
+				return productDTO;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<ProductDTO> getAllProducts() {
+
+		return mapper.map(productRepo.findAll(), new TypeToken<List<ProductDTO>>() {
 		}.getType());
 	}
 
 	@Override
-	public ProductDto getProductById(Long productid) {
+	public ProductDTO getProductById(Long productid) {
 		Product product = productRepo.findById(productid)
 				.orElseThrow(() -> new ProductNotExistException("Product is not present"));
 		String category = product.getCategory().getName();
-		ProductDto productDto = mapper.map(product, ProductDto.class);
-		productDto.setCategory(category);
-		return productDto;
+		ProductDTO productDTO = mapper.map(product, ProductDTO.class);
+		productDTO.setCategory(category);
+		return productDTO;
 	}
 
 	@Override
@@ -89,13 +148,13 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductDto updateProduct(ProductDto product) throws ProductNotExistException {
+	public ProductDTO updateProduct(ProductDTO product) throws ProductNotExistException {
 		Optional<Product> existingProduct = productRepo.findById(product.getId());
 		try {
 			if (!existingProduct.isEmpty()) {
 				Product prod = mapper.map(existingProduct, Product.class);
 				prod = productRepo.save(prod);
-				return mapper.map(prod, ProductDto.class);
+				return mapper.map(prod, ProductDTO.class);
 			}
 			return null;
 		} catch (ProductNotExistException e) {
@@ -105,26 +164,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductDto store(ProductDto productDto) throws IOException {
-
-		Product product = mapper.map(productDto, Product.class);
-
-		Date d = new Date();
-
-		product.setCreatedAt(new Timestamp(d.getTime()));
-		Category categry = categoryRepository.findByName(productDto.getCategory()).orElseThrow();
-		product.setCategory(categry);
-
-		Product savedProduct = productRepo.save(product);
-
-		return mapper.map(savedProduct, ProductDto.class);
-	}
-
-	@Override
-	public List<ProductDto> getProductByCategoryId(Long id) {
-		List<ProductDto> products = new ArrayList<>();
+	public List<ProductDTO> getProductByCategoryId(Long id) {
+		List<ProductDTO> products = new ArrayList<>();
 		try {
-			products = mapper.map(productRepo.findAllByCategoryId(id), new TypeToken<List<ProductDto>>() {
+			products = mapper.map(productRepo.findAllByCategoryId(id), new TypeToken<List<ProductDTO>>() {
 			}.getType());
 
 		} catch (Exception e) {
@@ -132,39 +175,6 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return products;
 
-	}
-
-	@Override
-	public ProductDto addProductDetails(Long id, ProductMetaDataDTO productMetaData1DTO, MetaData1DTO metaData1DTO,
-			MultipartFile[] files) {
-		ProductMetaData productMetaData = mapper.map(productMetaData1DTO, ProductMetaData.class);
-		MetaData1 metaData1 = mapper.map(metaData1DTO, MetaData1.class);
-		Product savedProduct = productRepo.findById(id).orElseThrow();
-		List<Images> images = addImages(files);
-
-		if (savedProduct != null) {
-			String category = savedProduct.getCategory().getName();
-			Optional<ProductMetaData> prod = productMetaDataRepository.findByProductIdAndColor(id,
-					productMetaData1DTO.getColor());
-			if (!prod.isEmpty()) {
-				metaData1.setProductMetaData(prod.get());
-				metaData1Repository.save(metaData1);
-				ProductDto productDto = mapper.map(savedProduct, ProductDto.class);
-				productDto.setCategory(category);
-				return productDto;
-
-			} else {
-				productMetaData.setProduct(savedProduct);
-				productMetaData.setImages(images);
-				ProductMetaData productData = productMetaDataRepository.save(productMetaData);
-				metaData1.setProductMetaData(productData);
-				metaData1Repository.save(metaData1);
-				ProductDto productDto = mapper.map(savedProduct, ProductDto.class);
-				productDto.setCategory(category);
-				return productDto;
-			}
-		}
-		return null;
 	}
 
 	private List<Images> addImages(MultipartFile[] files) {
@@ -181,15 +191,22 @@ public class ProductServiceImpl implements ProductService {
 			}
 		});
 
-		return mapper.map(productImagesDTOs, new TypeToken<Set<Images>>() {
+		return mapper.map(productImagesDTOs, new TypeToken<List<Images>>() {
 		}.getType());
 	}
 
 	@Override
-	public List<ProductDto> searchProducts(String value) {
+	public List<ProductDTO> searchProducts(String value) {
 		List<Product> products = productRepo.getProducts(value);
-		
-		return mapper.map(products, new TypeToken<List<ProductDto>>() {
+
+		return mapper.map(products, new TypeToken<List<ProductDTO>>() {
+		}.getType());
+	}
+
+	@Override
+	public List<ProductDTO> filterProducts(Double minPrice, Double maxPrice) {
+		List<Product> filterProducts = productRepo.getFilterProducts(minPrice, maxPrice);
+		return mapper.map(filterProducts, new TypeToken<List<ProductDTO>>() {
 		}.getType());
 	}
 
