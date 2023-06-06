@@ -61,6 +61,9 @@ public class Product implements Serializable {
 
 	private float rating;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "offer_id", nullable = false, referencedColumnName = "id")
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Offer offer;
 
 	private String url;
@@ -68,6 +71,8 @@ public class Product implements Serializable {
 	private String label;
 
 	private Double price;
+	
+	private Double priceAfterDiscount;
 
 	private Boolean visibility;
 

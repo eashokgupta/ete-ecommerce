@@ -3,6 +3,7 @@ package com.etelligens.ecommerce.model;
 import java.io.Serializable;
 import java.sql.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,6 +41,7 @@ public class Profile implements Serializable{
 	private Date birthday;
 	
 	@Lob
+	@Column(columnDefinition = "LONGBLOB")
 	private byte[] profilePhoto;
 	
 	

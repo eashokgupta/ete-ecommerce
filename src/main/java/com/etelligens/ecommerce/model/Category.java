@@ -36,6 +36,7 @@ public class Category implements Serializable{
 	private String name;
 	
 	@Lob
+	@Column(columnDefinition = "LONGBLOB")
 	private byte[] img;
 
 	@OneToMany(mappedBy = "category")

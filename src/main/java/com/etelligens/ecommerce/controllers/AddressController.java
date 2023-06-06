@@ -34,7 +34,7 @@ public class AddressController {
 	public ResponseEntity<AddressDTO> createAddress(HttpServletRequest request, @RequestBody AddressDTO addressDTO) {
 		String userId = userService.getUserName(request);
 		AddressDTO savedAddress = addressService.createAddress(userId, addressDTO);
-		return new ResponseEntity<>(savedAddress, HttpStatus.CREATED);
+		return new ResponseEntity<>(savedAddress, HttpStatus.OK);
 	}
 
 	@GetMapping("/allAddresses")

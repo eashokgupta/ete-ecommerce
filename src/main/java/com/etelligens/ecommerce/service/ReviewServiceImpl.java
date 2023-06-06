@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.etelligens.ecommerce.auth.model.User;
 import com.etelligens.ecommerce.auth.repositories.UserRepository;
-import com.etelligens.ecommerce.dto.ProductDto;
+import com.etelligens.ecommerce.dto.ProductDTO;
 import com.etelligens.ecommerce.dto.ReviewDTO;
 import com.etelligens.ecommerce.dto.ReviewImagesDTO;
 import com.etelligens.ecommerce.model.Product;

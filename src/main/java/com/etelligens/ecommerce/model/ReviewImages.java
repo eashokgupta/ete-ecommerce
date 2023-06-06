@@ -2,6 +2,7 @@ package com.etelligens.ecommerce.model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class ReviewImages implements Serializable{
 	private long id;
 	
 	@Lob
+	@Column(columnDefinition = "LONGBLOB")
 	private byte[] img;
 
 }

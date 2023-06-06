@@ -21,9 +21,9 @@ public class CommanPropertiesDTO {
 
 	private String label;
 
-	private OfferDTO offer;
-
 	private Double price;
+	
+	private Double priceAfterDiscount;
 	
 	private String shortDescription;
 
