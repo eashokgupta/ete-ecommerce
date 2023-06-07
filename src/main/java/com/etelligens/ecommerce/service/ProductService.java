@@ -32,4 +32,6 @@ public interface ProductService {
 	public List<ProductDTO> searchProducts(String value);
 	
 	 public List<ProductDTO> filterProducts(Double minPrice, Double maxPrice);
+
+	public List<ProductDTO> getSalesProduct(String salesType);
 }

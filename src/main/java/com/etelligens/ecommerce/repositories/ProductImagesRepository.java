@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.etelligens.ecommerce.model.Images;
 
 @Repository
-public interface ProductImagesRepo extends JpaRepository<Images, Long> {
+public interface ProductImagesRepository extends JpaRepository<Images, Long> {
 
 }

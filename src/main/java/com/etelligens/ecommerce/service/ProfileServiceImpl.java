@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.etelligens.ecommerce.dto.ProfileDTO;
 import com.etelligens.ecommerce.exception.ResourceNotFoundException;
 import com.etelligens.ecommerce.model.Profile;
-import com.etelligens.ecommerce.repositories.ProfileRepo;
+import com.etelligens.ecommerce.repositories.ProfileRepository;
 
 
 @Service
@@ -20,7 +20,7 @@ import com.etelligens.ecommerce.repositories.ProfileRepo;
 public class ProfileServiceImpl implements ProfileService {
 
 	@Autowired
-	ProfileRepo profileRepo;
+	ProfileRepository profileRepo;
 
 	@Autowired
 	ModelMapper mapper;

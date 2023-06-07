@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -28,19 +29,21 @@ import com.etelligens.ecommerce.model.MetaData1;
 import com.etelligens.ecommerce.model.Offer;
 import com.etelligens.ecommerce.model.Product;
 import com.etelligens.ecommerce.model.ProductMetaData;
+import com.etelligens.ecommerce.model.Review;
 import com.etelligens.ecommerce.repositories.CategoryRepository;
 import com.etelligens.ecommerce.repositories.MetaData1Repository;
 import com.etelligens.ecommerce.repositories.OfferRepository;
-import com.etelligens.ecommerce.repositories.ProductImagesRepo;
+import com.etelligens.ecommerce.repositories.ProductImagesRepository;
 import com.etelligens.ecommerce.repositories.ProductMetaDataRepository;
-import com.etelligens.ecommerce.repositories.ProductRepo;
+import com.etelligens.ecommerce.repositories.ProductRepository;
+import com.etelligens.ecommerce.repositories.ReviewRepository;
 
 @Service
 @Component
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
-	ProductRepo productRepo;
+	ProductRepository productRepo;
 
 	@Autowired
 	ProductMetaDataRepository productMetaDataRepository;
@@ -49,13 +52,16 @@ public class ProductServiceImpl implements ProductService {
 	MetaData1Repository metaData1Repository;
 
 	@Autowired
-	ProductImagesRepo imagesRepo;
+	ProductImagesRepository imagesRepo;
 
 	@Autowired
 	CategoryRepository categoryRepository;
 
 	@Autowired
 	OfferRepository offerRepository;
+	
+	@Autowired
+	ReviewRepository reviewRepository;
 
 	@Autowired
 	ModelMapper mapper;
@@ -132,7 +138,11 @@ public class ProductServiceImpl implements ProductService {
 		Product product = productRepo.findById(productid)
 				.orElseThrow(() -> new ProductNotExistException("Product is not present"));
 		String category = product.getCategory().getName();
+		List<Review> reviews = reviewRepository.findByProductId(productid);
+		Double rating = reviews.stream().collect(Collectors.averagingDouble(Review::getRating));
+		float rate = rating.floatValue();
 		ProductDTO productDTO = mapper.map(product, ProductDTO.class);
+		productDTO.setRating(rate);
 		productDTO.setCategory(category);
 		return productDTO;
 	}
@@ -152,7 +162,7 @@ public class ProductServiceImpl implements ProductService {
 		Optional<Product> existingProduct = productRepo.findById(product.getId());
 		try {
 			if (!existingProduct.isEmpty()) {
-				Product prod = mapper.map(existingProduct, Product.class);
+				Product prod = mapper.map(existingProduct.get(), Product.class);
 				prod = productRepo.save(prod);
 				return mapper.map(prod, ProductDTO.class);
 			}
@@ -208,6 +218,11 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> filterProducts = productRepo.getFilterProducts(minPrice, maxPrice);
 		return mapper.map(filterProducts, new TypeToken<List<ProductDTO>>() {
 		}.getType());
+	}
+
+	@Override
+	public List<ProductDTO> getSalesProduct(String salesType) {
+		return mapper.map(productRepo.getSalesProducts(salesType), new TypeToken<List<ProductDTO>>(){}.getType());
 	}
 
 }

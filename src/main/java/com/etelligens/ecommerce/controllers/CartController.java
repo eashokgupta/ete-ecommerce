@@ -55,7 +55,7 @@ public class CartController {
 	@GetMapping("/cart/{id}")
 	public ResponseEntity<CartDTO> getAllProductFromCart(HttpServletRequest request, @PathVariable Long id) {
 		String userId = userService.getUserName(request);
-		return new ResponseEntity<CartDTO>(cartService.getCartProductById(userId, id), HttpStatus.OK);
+		return new ResponseEntity<>(cartService.getCartProductById(userId, id), HttpStatus.OK);
 	}
 
 	@GetMapping("/cartItems")

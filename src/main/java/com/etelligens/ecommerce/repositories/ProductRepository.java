@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.etelligens.ecommerce.model.Product;
 
 @Repository
-public interface ProductRepo extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	public Optional<Product> findById(Integer productId);
 
@@ -26,5 +26,10 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 
 	@Query(value = "SELECT * FROM product WHERE price >= :minPrice AND price <= :maxPrice", nativeQuery = true)
 	public List<Product> getFilterProducts(@Param("minPrice") Double minPrice, @Param("maxPrice") Double maxPrice);
+
+	@Query("""
+			SELECT p FROM Product p LEFT JOIN p.sales ps WHERE ps.title = :salesType
+			""")
+	public List<Product> getSalesProducts(@Param("salesType") String salesType);
 
 }

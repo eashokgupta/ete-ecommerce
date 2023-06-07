@@ -1,16 +1,17 @@
 package com.etelligens.ecommerce.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,12 +23,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Offer implements Serializable {
+public class Sales implements Serializable{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8380054930651000544L;
+	private static final long serialVersionUID = 4742283803562388214L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,19 +36,18 @@ public class Offer implements Serializable {
 
 	private String title;
 
-	private String description;
-
-	private double amount;
+	private Double amount;
 
 	private String amountType;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "sales_id", nullable = false, referencedColumnName = "id")
+	private List<SalesImages> img;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy", timezone = "UTC")
 	private Date startedTime;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy", timezone = "UTC")
 	private Date endedTime;
-
-	@OneToMany(mappedBy = "offer")
-	private List<Product> products = new ArrayList<>();
 
 }

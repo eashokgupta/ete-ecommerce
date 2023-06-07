@@ -14,19 +14,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.etelligens.ecommerce.auth.model.User;
 import com.etelligens.ecommerce.auth.repositories.UserRepository;
-import com.etelligens.ecommerce.dto.ProductDTO;
 import com.etelligens.ecommerce.dto.ReviewDTO;
 import com.etelligens.ecommerce.dto.ReviewImagesDTO;
 import com.etelligens.ecommerce.model.Product;
 import com.etelligens.ecommerce.model.Review;
-import com.etelligens.ecommerce.repositories.ProductRepo;
-import com.etelligens.ecommerce.repositories.ReviewRepo;
+import com.etelligens.ecommerce.repositories.ProductRepository;
+import com.etelligens.ecommerce.repositories.ReviewRepository;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
 	@Autowired
-	ReviewRepo reviewRepo;
+	ReviewRepository reviewRepo;
 
 	@Autowired
 	ModelMapper mapper;
@@ -35,7 +34,7 @@ public class ReviewServiceImpl implements ReviewService {
 	UserRepository userRepository;
 
 	@Autowired
-	ProductRepo productRepo;
+	ProductRepository productRepo;
 
 	@Override
 	public ReviewDTO addReview(String userId, ReviewDTO reviewDTO, MultipartFile[] files) {
@@ -54,12 +53,14 @@ public class ReviewServiceImpl implements ReviewService {
 		});
 		reviewDTO.setReviewImages(reviewImagesDTOs);
 		Review createReview = mapper.map(reviewDTO, Review.class);
+		String userName = null;
 		if (user.isPresent() && product.isPresent()) {
 			createReview.setUser(user.get());
 			createReview.setProduct(product.get());
+			userName = user.get().getName();
 		}
 		ReviewDTO reviewDTO2 = mapper.map(reviewRepo.save(createReview), ReviewDTO.class);
-		reviewDTO2.setUsername(user.get().getName());
+		reviewDTO2.setUsername(userName);
 		return reviewDTO2;
 	}
 

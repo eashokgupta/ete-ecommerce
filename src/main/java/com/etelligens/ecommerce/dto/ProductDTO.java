@@ -21,6 +21,8 @@ public class ProductDTO extends CommanPropertiesDTO {
 	private List<ProductMetaDataDTO> productMetaData;
 
 	private Long offerId;
+	
+	private SalesDTO sales;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -32,11 +34,11 @@ public class ProductDTO extends CommanPropertiesDTO {
 		}
 		ProductDTO other = (ProductDTO) obj;
 		return Objects.equals(id, other.id) && Objects.equals(category, other.category)
-				&& Objects.equals(productMetaData, other.productMetaData) && Objects.equals(offerId, other.offerId);
+				&& Objects.equals(productMetaData, other.productMetaData) && Objects.equals(offerId, other.offerId)  && Objects.equals(sales, other.sales);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, category, productMetaData);
+		return Objects.hash(id, category, productMetaData, offerId, sales);
 	}
 }

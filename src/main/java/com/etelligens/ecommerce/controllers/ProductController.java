@@ -37,7 +37,7 @@ public class ProductController {
 	CategoryService categoryService;
 
 	@PostMapping("/product/upload")
-	public ResponseEntity<ProductDTO> addNewProduct(@RequestBody ProductDTO product) throws IOException {
+	public ResponseEntity<ProductDTO> addNewProduct(@RequestBody ProductDTO product) {
 
 		return new ResponseEntity<>(productService.addNewProduct(product), HttpStatus.OK);
 
@@ -127,5 +127,11 @@ public class ProductController {
 			@RequestParam("maxPrice") Double maxPrice) {
 		List<ProductDTO> filter = productService.filterProducts(minPrice, maxPrice);
 		return new ResponseEntity<>(filter, HttpStatus.OK);
+	}
+	
+	@GetMapping("/sales")
+	public ResponseEntity<List<ProductDTO>> salesProducts(@RequestParam("salesName") String salesType){
+		List<ProductDTO> sales = productService.getSalesProduct(salesType); 
+		return new ResponseEntity<>(sales, HttpStatus.OK);
 	}
 }
