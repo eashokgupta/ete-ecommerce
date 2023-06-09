@@ -65,6 +65,12 @@ public class Product implements Serializable {
 	@JoinColumn(name = "offer_id", nullable = false, referencedColumnName = "id")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Offer offer;
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "sales_id", nullable = false, referencedColumnName = "id")
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	private Sales sales;
 
 	private String url;
 

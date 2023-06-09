@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.etelligens.ecommerce.dto.CartDTO;
 import com.etelligens.ecommerce.model.Cart;
-import com.etelligens.ecommerce.repositories.CartRepo;
+import com.etelligens.ecommerce.repositories.CartRepository;
 
 @Service
 public class CartServiceImpl implements CartService {
 
 	@Autowired
-	CartRepo cartRepo;
+	CartRepository cartRepository;
 
 	@Autowired
 	ModelMapper mapper;
@@ -23,20 +23,20 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public List<CartDTO> getAllCartItem(String userId) {
 
-		return mapper.map(cartRepo.findByUserId(userId), new TypeToken<List<CartDTO>>() {
+		return mapper.map(cartRepository.findByUserId(userId), new TypeToken<List<CartDTO>>() {
 		}.getType());
 	}
 
 	@Override
 	public CartDTO addToCart(String userId, CartDTO cart) {
 		Cart addItemToCart = mapper.map(cart, Cart.class);
-		return mapper.map(cartRepo.save(addItemToCart), CartDTO.class);
+		return mapper.map(cartRepository.save(addItemToCart), CartDTO.class);
 	}
 
 	@Override
 		public String deleteCartProductById(String userId, Long id) {
-			cartRepo.deleteByIdAndUserId(userId,id);
-			Boolean flag = cartRepo.findById(id).isEmpty();
+			cartRepository.deleteByIdAndUserId(userId,id);
+			Boolean flag = cartRepository.findById(id).isEmpty();
 			if (Boolean.TRUE.equals(flag)) {
 				return "Item Successfully Deleted";
 			}
@@ -46,10 +46,10 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public CartDTO updateCart(String userId, CartDTO cart) {
-	Boolean cart1 =	cartRepo.findByUserId(userId).isEmpty();
+	Boolean cart1 =	cartRepository.findByUserId(userId).isEmpty();
 	if(Boolean.FALSE.equals(cart1)) {
 		Cart updateCart = mapper.map(cart, Cart.class);
-		updateCart = cartRepo.save(updateCart);
+		updateCart = cartRepository.save(updateCart);
 		return mapper.map(updateCart, CartDTO.class);
 	}
 	return null;
@@ -57,6 +57,6 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public CartDTO getCartProductById(String userId, Long productId) {
-		return mapper.map(cartRepo.findById(productId).orElseThrow(), CartDTO.class);
+		return mapper.map(cartRepository.findById(productId).orElseThrow(), CartDTO.class);
 	}
 }

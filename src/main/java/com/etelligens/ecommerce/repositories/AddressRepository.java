@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.etelligens.ecommerce.model.Address;
 
 @Repository
-public interface AddressRepo extends JpaRepository<Address, Long> {
+public interface AddressRepository extends JpaRepository<Address, Long> {
 	
 	public List<Address> findByUserEmail(String id);
 

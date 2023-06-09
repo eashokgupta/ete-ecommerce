@@ -12,13 +12,13 @@ import com.etelligens.ecommerce.auth.model.User;
 import com.etelligens.ecommerce.auth.repositories.UserRepository;
 import com.etelligens.ecommerce.dto.AddressDTO;
 import com.etelligens.ecommerce.model.Address;
-import com.etelligens.ecommerce.repositories.AddressRepo;
+import com.etelligens.ecommerce.repositories.AddressRepository;
 
 @Service
 public class AddressServiceImpl implements AddressService {
 
 	@Autowired
-	AddressRepo addressRepo;
+	AddressRepository addressRepo;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -28,7 +28,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public AddressDTO createAddress(String id,AddressDTO addressDTO) {
-		User user = userRepository.findByEmail(id).get();
+		User user = userRepository.findByEmail(id).orElseThrow();
 		Address address = mapper.map(addressDTO, Address.class);
 		address.setUser(user);
 		Address savedAddress = addressRepo.save(address);
