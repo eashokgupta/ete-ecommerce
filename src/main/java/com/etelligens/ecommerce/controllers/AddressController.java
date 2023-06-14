@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.etelligens.ecommerce.auth.service.UserService;
 import com.etelligens.ecommerce.dto.AddressDTO;
+import com.etelligens.ecommerce.dto.LocationDTO;
 import com.etelligens.ecommerce.service.AddressService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,4 +60,27 @@ public class AddressController {
 		return new ResponseEntity<>(addressDTO, HttpStatus.OK);
 	}
 
+	@PostMapping("/addLocation")
+	public ResponseEntity<LocationDTO> addLocation(@RequestBody LocationDTO locationDTO) {
+		LocationDTO savedLocation = addressService.addLocation(locationDTO);
+		return new ResponseEntity<>(savedLocation, HttpStatus.OK);
+	}
+
+	@GetMapping("/getCity/{state}/{country}")
+	public ResponseEntity<List<String>> getCity(@PathVariable String state, @PathVariable String country) {
+		List<String> getCityLocation = addressService.getCity(state);
+		return new ResponseEntity<>(getCityLocation, HttpStatus.OK);
+	}
+
+	@GetMapping("/getState/{country}")
+	public ResponseEntity<List<String>> getState(@PathVariable String country) {
+		List<String> getStateLocation = addressService.getState(country);
+		return new ResponseEntity<>(getStateLocation, HttpStatus.OK);
+	}
+
+	@GetMapping("/getCountry")
+	public ResponseEntity<List<String>> getCountry() {
+		List<String> getCountryLocation = addressService.getCountry();
+		return new ResponseEntity<>(getCountryLocation, HttpStatus.OK);
+	}
 }
