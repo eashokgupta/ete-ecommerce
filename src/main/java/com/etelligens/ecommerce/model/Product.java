@@ -49,6 +49,9 @@ public class Product implements Serializable {
 
 	private String upc;
 
+	private Double discount;
+
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
