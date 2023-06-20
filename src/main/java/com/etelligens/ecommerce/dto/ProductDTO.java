@@ -24,6 +24,8 @@ public class ProductDTO extends CommanPropertiesDTO {
 	
 	private SalesDTO sales;
 
+	private Double discount;
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

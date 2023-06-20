@@ -163,12 +163,14 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			if (!existingProduct.isEmpty()) {
 				Product prod = mapper.map(existingProduct.get(), Product.class);
+				Double specialPrice = (product.getPrice() - ((product.getDiscount() * 0.01) * product.getPrice()));
+				prod.setPriceAfterDiscount(specialPrice);
 				prod = productRepo.save(prod);
 				return mapper.map(prod, ProductDTO.class);
 			}
 			return null;
 		} catch (ProductNotExistException e) {
-			throw new ProductNotExistException("product is invalid" + product.getId());
+			throw new ProductNotExistException("Product not found!!" + product.getId());
 		}
 
 	}

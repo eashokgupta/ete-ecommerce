@@ -1,8 +1,6 @@
 package com.etelligens.ecommerce.model;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,9 +25,6 @@ public class WishList {
 
     @Column(name = "user_Email")
     private String userEmail;
-
-   /* @Column(name = "product_id",unique = true,nullable = false)
-    private Long productId;*/
 
     @Column(name = "created_date")
     private Date createdDate;
