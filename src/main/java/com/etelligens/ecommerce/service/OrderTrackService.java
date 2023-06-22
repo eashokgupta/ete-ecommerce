@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface OrderTrackService {
 
-    OrderTrack getOrder(Long orderId);
+    OrderTrackDto getOrder(Long orderId);
 
-    OrderTrack updateOrderStatus(Long orderId, String status);
+    OrderTrackDto updateOrderStatus(Long orderId, String orderStatus);
 }

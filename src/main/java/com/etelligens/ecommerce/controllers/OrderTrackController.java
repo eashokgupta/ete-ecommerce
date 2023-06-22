@@ -1,5 +1,6 @@
 package com.etelligens.ecommerce.controllers;
 
+import com.etelligens.ecommerce.dto.OrderTrackDto;
 import com.etelligens.ecommerce.model.OrderTrack;
 import com.etelligens.ecommerce.service.OrderTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,12 @@ public class OrderTrackController {
     OrderTrackService orderTrackService;
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<OrderTrack> findOrder(@PathVariable Long orderId){
+    public ResponseEntity<OrderTrackDto> findOrder(@PathVariable Long orderId){
         return new ResponseEntity<>(orderTrackService.getOrder(orderId), HttpStatus.OK);
     }
 
     @PutMapping("/update-track/{orderId}")
-    public ResponseEntity<OrderTrack> updateOrderStatus(@PathVariable Long orderId, @RequestBody String status){
+    public ResponseEntity<OrderTrackDto> updateOrderStatus(@PathVariable Long orderId, @RequestBody String status){
         return new ResponseEntity<>(orderTrackService.updateOrderStatus(orderId,status),HttpStatus.CREATED);
     }
 
