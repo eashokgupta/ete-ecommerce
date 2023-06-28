@@ -7,6 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 public class OrderTrackServiceImpl implements OrderTrackService{
 
@@ -16,18 +18,18 @@ public class OrderTrackServiceImpl implements OrderTrackService{
     ModelMapper mapper;
 
     @Override
-    public OrderTrack getOrder(Long orderId) {
-       return trackRepository.findById(orderId)
-               .orElseThrow(() -> new IllegalArgumentException("Order not found with orderId: " + orderId));
+    public OrderTrackDto getOrder(Long orderId) {
+       return mapper.map(trackRepository.findById(orderId)
+               .orElseThrow(() -> new IllegalArgumentException("Order not found with orderId: " + orderId)),OrderTrackDto.class);
 
     }
 
 
     @Override
-    public OrderTrack updateOrderStatus(Long orderId, String status) {
+    public OrderTrackDto updateOrderStatus(Long orderId, String orderStatus) {
         OrderTrack order = trackRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderId));
-        order.setStatus(status);
-        return trackRepository.save(order);
+        order.setOrderStatus(Arrays.asList(orderStatus));
+        return mapper.map(trackRepository.save(order),OrderTrackDto.class);
     }
 }

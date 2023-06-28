@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +31,6 @@ public class OrderTrack {
     @Column(name = "order_id")
     private String orderId;
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "order_status")
+    private List<String> orderStatus;
 }
