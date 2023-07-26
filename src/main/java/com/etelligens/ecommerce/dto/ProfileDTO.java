@@ -1,6 +1,8 @@
 package com.etelligens.ecommerce.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
@@ -13,19 +15,19 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileDTO {
-	
-	
-	private String user;
-	private Long profileId;
+
+	private Long id;
 	private String firstName;
 	private String lastName;
 	private String gender;
 	private Long phoneNumber;
 	private String email;
 	private String password;
-	private Date birthday;
-	
+
+	@JsonFormat(pattern = "dd-MM-yyyy")
+	private LocalDate birthday;
+
 	@Lob
 	private byte[] profilePhoto;
-	
-	}
+
+}

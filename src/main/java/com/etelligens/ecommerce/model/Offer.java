@@ -1,8 +1,8 @@
 package com.etelligens.ecommerce.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -42,10 +42,10 @@ public class Offer implements Serializable {
 	private String amountType;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy", timezone = "UTC")
-	private Date startedTime;
+	private LocalDate startedTime;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy", timezone = "UTC")
-	private Date endedTime;
+	private LocalDate endedTime;
 
 	@OneToMany(mappedBy = "offer")
 	private List<Product> products = new ArrayList<>();

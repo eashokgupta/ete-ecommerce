@@ -33,8 +33,7 @@ public class OfferController {
 	
 	@PostMapping("/newOffer")
 	public ResponseEntity<OfferDTO> addOffers(@RequestBody OfferDTO offer){
-	     OfferDTO off =	offerService.addOffer(offer);
-	     return new ResponseEntity<>(off, HttpStatus.OK);
+	     return new ResponseEntity<>(offerService.addOffer(offer), HttpStatus.OK);
 	}
 	
 	@GetMapping("/getOffers")
@@ -53,7 +52,7 @@ public class OfferController {
 	}
 	
 	@PostMapping("newSales")
-	public ResponseEntity<SalesDTO> addNewSales(@RequestParam("sales") SalesDTO sales, @RequestParam("img") MultipartFile[] salesImgs){
+	public ResponseEntity<SalesDTO> addNewSales(@RequestParam("sales") String sales, @RequestParam("img") MultipartFile[] salesImgs){
 		return new ResponseEntity<>(salesService.addNewSales(sales, salesImgs), HttpStatus.OK);
 	}
 	
@@ -62,7 +61,7 @@ public class OfferController {
 		return new ResponseEntity<>(salesService.getSalesByTitle(title), HttpStatus.OK);
 	}
 	@PutMapping("/updateSales")
-	public ResponseEntity<SalesDTO> updateSales(@RequestParam("sales") SalesDTO sales, @RequestParam("img") MultipartFile[] salesImgs){
+	public ResponseEntity<SalesDTO> updateSales(@RequestParam("sales") String sales, @RequestParam("img") MultipartFile[] salesImgs){
 		return new ResponseEntity<>(salesService.updateSales(sales, salesImgs), HttpStatus.OK);
 	}
 	@DeleteMapping("/deleteSales/{id}")

@@ -14,8 +14,12 @@ public class TestControllers {
 	 * Hello Api For Testing
 	 */
 	
+//	@GetMapping
+//	public LocalDateTime getResult() {
+//		return LocalDateTime.now();
+//	}
 	@GetMapping
-	public LocalDateTime getResult() {
-		return LocalDateTime.now();
+	public String getResult() {
+		return "Hello";
 	}
 }

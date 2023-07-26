@@ -30,7 +30,7 @@ public class Orders implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "order_id", referencedColumnName = "id")
-	private List<OrderItem> orderItems = new ArrayList();
+	private List<OrderItem> orderItems = new ArrayList<>();
 
 	private Timestamp orderDate;
 
@@ -39,8 +39,8 @@ public class Orders implements Serializable {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private User user;
 
-	/*@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name ="address_id", referencedColumnName = "id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})*/
-	private List<Address> address;
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Address address;
 }

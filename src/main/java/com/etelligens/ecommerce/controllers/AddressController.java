@@ -34,53 +34,42 @@ public class AddressController {
 	@PostMapping("/createAddress")
 	public ResponseEntity<AddressDTO> createAddress(HttpServletRequest request, @RequestBody AddressDTO addressDTO) {
 		String userId = userService.getUserName(request);
-		AddressDTO savedAddress = addressService.createAddress(userId, addressDTO);
-		return new ResponseEntity<>(savedAddress, HttpStatus.OK);
+		return new ResponseEntity<>(addressService.createAddress(userId, addressDTO), HttpStatus.OK);
 	}
 
 	@GetMapping("/allAddresses")
 	public ResponseEntity<List<AddressDTO>> getAllAddresses(HttpServletRequest request) {
 		String userId = userService.getUserName(request);
-		List<AddressDTO> addresses = addressService.getAllAddresses(userId);
-
-		return new ResponseEntity<>(addresses, HttpStatus.OK);
+		return new ResponseEntity<>(addressService.getAllAddresses(userId), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteAddress/{addressId}")
 	public ResponseEntity<String> deleteAddress(@PathVariable long addressId) {
-		addressService.deleteAddress(addressId);
-
-		return new ResponseEntity<>("Address Successfully Deleted", HttpStatus.OK);
+		return new ResponseEntity<>(addressService.deleteAddress(addressId), HttpStatus.OK);
 	}
 
 	@PutMapping("/updateAddress")
-	public ResponseEntity<AddressDTO> updateAddress(@RequestBody AddressDTO address) {
-		AddressDTO addressDTO = addressService.updateAddress(address);
-
-		return new ResponseEntity<>(addressDTO, HttpStatus.OK);
+	public ResponseEntity<AddressDTO> updateAddress(HttpServletRequest request, @RequestBody AddressDTO address) {
+		return new ResponseEntity<>(addressService.updateAddress(address), HttpStatus.OK);
 	}
 
 	@PostMapping("/addLocation")
 	public ResponseEntity<LocationDTO> addLocation(@RequestBody LocationDTO locationDTO) {
-		LocationDTO savedLocation = addressService.addLocation(locationDTO);
-		return new ResponseEntity<>(savedLocation, HttpStatus.OK);
+		return new ResponseEntity<>(addressService.addLocation(locationDTO), HttpStatus.OK);
 	}
 
 	@GetMapping("/getCity/{state}/{country}")
 	public ResponseEntity<List<String>> getCity(@PathVariable String state, @PathVariable String country) {
-		List<String> getCityLocation = addressService.getCity(state);
-		return new ResponseEntity<>(getCityLocation, HttpStatus.OK);
+		return new ResponseEntity<>(addressService.getCity(state), HttpStatus.OK);
 	}
 
 	@GetMapping("/getState/{country}")
 	public ResponseEntity<List<String>> getState(@PathVariable String country) {
-		List<String> getStateLocation = addressService.getState(country);
-		return new ResponseEntity<>(getStateLocation, HttpStatus.OK);
+		return new ResponseEntity<>(addressService.getState(country), HttpStatus.OK);
 	}
 
 	@GetMapping("/getCountry")
 	public ResponseEntity<List<String>> getCountry() {
-		List<String> getCountryLocation = addressService.getCountry();
-		return new ResponseEntity<>(getCountryLocation, HttpStatus.OK);
+		return new ResponseEntity<>(addressService.getCountry(), HttpStatus.OK);
 	}
 }

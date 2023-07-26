@@ -10,12 +10,14 @@ import com.etelligens.ecommerce.dto.ReviewDTO;
 @Component
 public interface ReviewService {
 	
-	public ReviewDTO addReview(String userId, ReviewDTO reviewDTO, MultipartFile[] files );
+	public ReviewDTO addReview(String userId, String review, MultipartFile[] files );
 	
-	public ReviewDTO updateReview(ReviewDTO review, MultipartFile[] files);
+	public ReviewDTO updateReview(String userId, String review, MultipartFile[] files);
 	
 	public List<ReviewDTO> getAll(Long productId);
 	
 	public String deleteReview(Long id);
+
+	public String deleteReviewImages(Long imageId);
 
 }

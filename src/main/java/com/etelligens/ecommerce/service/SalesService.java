@@ -10,7 +10,7 @@ import com.etelligens.ecommerce.dto.SalesDTO;
 @Component
 public interface SalesService {
 
-	public SalesDTO addNewSales(SalesDTO sales, MultipartFile[] salesImgs);
+	public SalesDTO addNewSales(String sales, MultipartFile[] salesImgs);
 
 	public SalesDTO getSalesByTitle(String title);
 
@@ -18,5 +18,5 @@ public interface SalesService {
 
 	public String deleteSales(Long id);
 
-	public SalesDTO updateSales(SalesDTO sales, MultipartFile[] salesImgs);
+	public SalesDTO updateSales(String sales, MultipartFile[] salesImgs);
 }

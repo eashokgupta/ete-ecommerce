@@ -21,7 +21,7 @@ public class OrderDto {
 	    private List<OrderItemDto> orderItems = new ArrayList<>();
 	    private Date orderDate;
 	    private UserDTO user;
-	    private List<AddressDTO> address;
+	    private AddressDTO address;
 	    
 	   
 }

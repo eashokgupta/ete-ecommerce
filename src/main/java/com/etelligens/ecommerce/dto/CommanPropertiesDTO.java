@@ -1,6 +1,7 @@
 package com.etelligens.ecommerce.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,11 +15,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CommanPropertiesDTO {
-	
+
 	private Integer quantity;
 
 	private String name;
-	
+
 	private float rating;
 
 	private String brand;
@@ -26,23 +27,27 @@ public class CommanPropertiesDTO {
 	private String label;
 
 	private Double price;
+
+	private String discountType;
+
+	private Double discountAmount;
 	
 	private Double priceAfterDiscount;
-	
+
 	private String shortDescription;
 
 	private String description;
-	
-	private ReviewDTO reviews;
+
+	private List<ReviewDTO> reviews;
 
 	private String sku;
 
 	private String upc;
-	
+
 	private String specification;
-	
+
 	private String url;
-	
+
 	private Boolean visibility;
 
 	private Boolean b2b;
@@ -50,6 +55,5 @@ public class CommanPropertiesDTO {
 	private Timestamp createdAt;
 
 	private Timestamp updatedAt;
-	
 
 }

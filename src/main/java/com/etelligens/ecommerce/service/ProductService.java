@@ -1,14 +1,15 @@
 package com.etelligens.ecommerce.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.etelligens.ecommerce.dto.MetaData1DTO;
 import com.etelligens.ecommerce.dto.ProductDTO;
-import com.etelligens.ecommerce.dto.ProductMetaDataDTO;
+import com.etelligens.ecommerce.dto.ProductDetailsDTO;
+import com.etelligens.ecommerce.dto.ProductResponseDTO;
 
 
 @Component
@@ -27,11 +28,17 @@ public interface ProductService {
 
 	public List<ProductDTO> getProductByCategoryId(Long id);
 
-	public ProductDTO addProductDetails(Long id, ProductMetaDataDTO productMetaData1DTO, MetaData1DTO metaData1DTO,
-			MultipartFile[] files, Long offerId);
+	public ProductDTO addProductDetails(String productId, String productMetaData, String metaData,
+			MultipartFile[] files) throws IOException;
 	public List<ProductDTO> searchProducts(String value);
 	
 	 public List<ProductDTO> filterProducts(Double minPrice, Double maxPrice);
 
 	public List<ProductDTO> getSalesProduct(String salesType);
+
+	public ProductDetailsDTO getProductResponseDTO(Long id);
+
+	public ProductDTO getProductsByColor(Long id, String color);
+
+	public List<ProductResponseDTO> getProductResponseDTO();
 }

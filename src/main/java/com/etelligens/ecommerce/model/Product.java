@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.etelligens.ecommerce.dto.ReviewDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -43,14 +44,13 @@ public class Product implements Serializable {
 
 	private String description;
 
-	private String color;
-
 	private String sku;
 
 	private String upc;
 
-	private Double discount;
+	private Double discountAmount;
 
+	private String discountType;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id")
@@ -63,15 +63,18 @@ public class Product implements Serializable {
 	private String brand;
 
 	private float rating;
+	
+	@OneToMany(mappedBy = "product")
+	private List<Review> reviews;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "offer_id", nullable = false, referencedColumnName = "id")
+	@JoinColumn(name = "offer_id", referencedColumnName = "id")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Offer offer;
 	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "sales_id", nullable = false, referencedColumnName = "id")
+	@JoinColumn(name = "sales_id", referencedColumnName = "id")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Sales sales;
 

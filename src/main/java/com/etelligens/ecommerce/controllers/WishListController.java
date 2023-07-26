@@ -1,6 +1,5 @@
 package com.etelligens.ecommerce.controllers;
 
-import com.etelligens.ecommerce.auth.model.AuthenticationRequest;
 import com.etelligens.ecommerce.auth.service.UserService;
 import com.etelligens.ecommerce.dto.ProductDTO;
 import com.etelligens.ecommerce.dto.WishListDTO;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.security.auth.login.LoginException;
 import java.util.List;
 
 @RestController
@@ -32,9 +30,6 @@ public class WishListController {
     ProductService productService;
 
     @Autowired
-    private AuthenticationRequest authenticationService;
-
-    @Autowired
     UserService userService;
 
     @GetMapping("/get-wishlist")
@@ -44,9 +39,9 @@ public class WishListController {
     }
 
     @PostMapping("/wishlist")
-    public ResponseEntity<String> createWishList(HttpServletRequest request, @RequestBody WishListDTO wishList) throws LoginException {
+    public ResponseEntity<String> createWishList(HttpServletRequest request, @RequestBody WishListDTO wishList) {
         String userEmail = userService.getUserName(request);
-        return new ResponseEntity<>(wishListService.createWishlist(userEmail,wishList),HttpStatus.CREATED);
+        return new ResponseEntity<>(wishListService.createWishlist(userEmail,wishList),HttpStatus.OK);
 
     }
     @DeleteMapping("/delete/{id}")

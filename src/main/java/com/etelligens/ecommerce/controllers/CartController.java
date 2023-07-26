@@ -20,36 +20,33 @@ import com.etelligens.ecommerce.service.CartService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
 @RestController
 @RequestMapping("/ecommerce")
 public class CartController {
 
 	@Autowired
 	CartService cartService;
-	
+
 	@Autowired
 	UserService userService;
 
 	@PostMapping("/addToCart")
 	public ResponseEntity<CartDTO> addToCart(HttpServletRequest request, @RequestBody CartDTO cart) {
 		String userId = userService.getUserName(request);
-		CartDTO cart2 = cartService.addToCart(userId,cart);
-		return new ResponseEntity<>(cart2, HttpStatus.OK);
+		return new ResponseEntity<>(cartService.addToCart(userId, cart), HttpStatus.OK);
 
 	}
 
 	@PutMapping("/updateCart")
 	public ResponseEntity<CartDTO> updateCart(HttpServletRequest request, @RequestBody CartDTO cart) {
 		String userId = userService.getUserName(request);
-		CartDTO updateItem = cartService.updateCart(userId,cart);
-		return new ResponseEntity<>(updateItem, HttpStatus.OK);
+		return new ResponseEntity<>(cartService.updateCart(userId, cart), HttpStatus.OK);
 	}
+
 	@DeleteMapping("/deleteCart/{id}")
-	public ResponseEntity<String> deleteProduct(HttpServletRequest request,@PathVariable Long id) {
+	public ResponseEntity<String> deleteProduct(HttpServletRequest request, @PathVariable Long id) {
 		String userId = userService.getUserName(request);
-		    cartService.deleteCartProductById(userId,id);
-		return new ResponseEntity<>("Item Deleted Successfully", HttpStatus.OK);
+		return new ResponseEntity<>(cartService.deleteCartProductById(userId, id), HttpStatus.OK);
 	}
 
 	@GetMapping("/cart/{id}")
@@ -61,8 +58,7 @@ public class CartController {
 	@GetMapping("/cartItems")
 	public ResponseEntity<List<CartDTO>> findAllCartItem(HttpServletRequest request) {
 		String userId = userService.getUserName(request);
-		List<CartDTO> items = cartService.getAllCartItem(userId);
-		return new ResponseEntity<>(items, HttpStatus.OK);
+		return new ResponseEntity<>(cartService.getAllCartItem(userId), HttpStatus.OK);
 
 	}
 

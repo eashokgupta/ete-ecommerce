@@ -1,6 +1,7 @@
 package com.etelligens.ecommerce.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -23,7 +24,7 @@ public class SalesDTO {
 	
 	private String amountType;
 	
-	private SalesImagesDTO img;
+	private List<SalesImagesDTO> img;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy", timezone = "UTC")
 	private Date startedTime;

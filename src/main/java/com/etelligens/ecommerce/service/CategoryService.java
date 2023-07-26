@@ -13,8 +13,8 @@ public interface CategoryService {
 
 	public List<CategoryDTO> getAllCategories();
 	
-	public CategoryDTO addCategory(MultipartFile file, CategoryDTO category) throws IOException;
+	public CategoryDTO addCategory(MultipartFile file, String name) throws IOException;
 	
-	public CategoryDTO updateCategory(MultipartFile file, CategoryDTO category) throws IOException;
+	public CategoryDTO updateCategory(Long id, MultipartFile file, String name) throws IOException;
 
 }

@@ -1,6 +1,6 @@
 package com.etelligens.ecommerce.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -26,9 +26,9 @@ public class OfferDTO {
 	private String amountType;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy", timezone = "UTC")
-	private Date startedTime;
+	private LocalDate startedTime;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy", timezone = "UTC")
-	private Date endedTime;
+	private LocalDate endedTime;
 
 }

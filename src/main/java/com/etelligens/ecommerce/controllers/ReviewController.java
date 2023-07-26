@@ -18,12 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.etelligens.ecommerce.auth.service.UserService;
 import com.etelligens.ecommerce.dto.ReviewDTO;
 import com.etelligens.ecommerce.service.ReviewService;
-import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/toAll/reviews")
+@RequestMapping("/ecommerce/reviews")
 public class ReviewController {
 
 	@Autowired
@@ -33,32 +32,32 @@ public class ReviewController {
 	UserService userService;
 
 	@PostMapping("/createreview")
-	public ResponseEntity<ReviewDTO> createReview(HttpServletRequest request,@RequestParam("review") String review,	@RequestParam("imgs") MultipartFile[] files) {
-		Gson g = new Gson();
-		ReviewDTO reviewdto = g.fromJson(review, ReviewDTO.class);
+	public ResponseEntity<ReviewDTO> createReview(HttpServletRequest request, @RequestParam("review") String review,
+			@RequestParam("imgs") MultipartFile[] files) {
 		String userId = userService.getUserName(request);
-		ReviewDTO savedReview = reviewService.addReview(userId, reviewdto, files);
-		return ResponseEntity.status(HttpStatus.CREATED).body(savedReview);
+		return ResponseEntity.status(HttpStatus.OK).body(reviewService.addReview(userId, review, files));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ReviewDTO> updateReview(@RequestParam("review") String review,	@RequestParam("imgs") MultipartFile[] files) {
-		Gson g = new Gson();
-		ReviewDTO reviewdto = g.fromJson(review, ReviewDTO.class);
-		ReviewDTO updatedReview = reviewService.updateReview(reviewdto, files);
-		return ResponseEntity.ok(updatedReview);
+	public ResponseEntity<ReviewDTO> updateReview(HttpServletRequest request, @RequestParam("review") String review,
+			@RequestParam("imgs") MultipartFile[] files) {
+		String userId = userService.getUserName(request);
+		return new ResponseEntity<>(reviewService.updateReview(userId, review, files), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-	public String deleteReviewById(@PathVariable("id") Long reviewId) {
-		reviewService.deleteReview(reviewId);
-
-		return "Deleted Successfully";
+	public ResponseEntity<String> deleteReviewById(@PathVariable("id") Long reviewId) {
+		return new ResponseEntity<>(reviewService.deleteReview(reviewId), HttpStatus.OK);
 	}
 
 	@GetMapping("/{productId}/getAll")
-	public List<ReviewDTO> getAllReviews(@PathVariable Long productId) {
-		return reviewService.getAll(productId);
+	public ResponseEntity<List<ReviewDTO>> getAllReviews(@PathVariable Long productId) {
+		return new ResponseEntity<>(reviewService.getAll(productId), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("delete-reviewImages/{id}")
+	public ResponseEntity<String> deleteReviewImages(@PathVariable("id") Long imageId){
+		return new ResponseEntity<>(reviewService.deleteReviewImages(imageId), HttpStatus.OK);
 	}
 
 }

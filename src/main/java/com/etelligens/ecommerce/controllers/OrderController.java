@@ -1,45 +1,48 @@
 package com.etelligens.ecommerce.controllers;
 
+import com.etelligens.ecommerce.auth.service.UserService;
 import com.etelligens.ecommerce.dto.OrderDto;
 import com.etelligens.ecommerce.model.Orders;
 import com.etelligens.ecommerce.service.OrderService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/ecommerce/orders")
 
 public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	UserService userService;
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Orders> getOrder(@PathVariable("id") Long id) {
-		Optional<Orders> order = orderService.getOrderById(id);
-		return ResponseEntity.ok(order.get());
+		return ResponseEntity.ok(orderService.getOrderById(id));
 	}
 
 	@PostMapping("/createOrder")
-	public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto order) {
-		OrderDto savedOrder = orderService.createOrder(order);
-		return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
+	public ResponseEntity<OrderDto> createOrder(HttpServletRequest request, @RequestBody OrderDto order) {
+		String userId = userService.getUserName(request);
+		return ResponseEntity.status(HttpStatus.OK).body(orderService.createOrder(userId,order));
 	}
 
 	@PutMapping("/updateorder")
 	public ResponseEntity<OrderDto> updateOrder( @RequestBody OrderDto order) {
-		OrderDto updatedOrder = orderService.updateOrder(order);
-		return ResponseEntity.ok(updatedOrder);
+		return ResponseEntity.ok(orderService.updateOrder(order));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteOrder(@PathVariable("id") Long id) {
-		String result = orderService.deleteOrder(id);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.ok(orderService.deleteOrder(id));
 		
 	}
 

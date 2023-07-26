@@ -32,4 +32,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			""")
 	public List<Product> getSalesProducts(@Param("salesType") String salesType);
 
+	@Query("""
+			SELECT p FROM Product p LEFT JOIN p.productMetaData pm LEFT JOIN pm.images i LEFT JOIN pm.metaData m WHERE p.id=:id AND pm.color=:color
+			""")
+	public Product findByIdAndColor(@Param("id") Long id, @Param("color") String color);
+
 }

@@ -9,6 +9,7 @@ import com.etelligens.ecommerce.model.Profile;
 
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
-	public Optional<Profile> findById(Long id);
+	
+	public Optional<Profile> findByUserEmail(String userId);
 
 }

@@ -50,8 +50,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public AddressDTO updateAddress(AddressDTO address) {
-
-		Optional<Address> existingAddress = addressRepo.findById(address.getAddressId());
+		Optional<Address> existingAddress = addressRepo.findById(address.getId());
 
 		if (!existingAddress.isEmpty()) {
 			User user = existingAddress.get().getUser();

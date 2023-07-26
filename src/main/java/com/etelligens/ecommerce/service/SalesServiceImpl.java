@@ -17,6 +17,7 @@ import com.etelligens.ecommerce.dto.SalesImagesDTO;
 import com.etelligens.ecommerce.model.Sales;
 import com.etelligens.ecommerce.model.SalesImages;
 import com.etelligens.ecommerce.repositories.SalesRepository;
+import com.etelligens.ecommerce.utils.StringToObjectConvert;
 
 @Service
 public class SalesServiceImpl implements SalesService{
@@ -26,11 +27,14 @@ public class SalesServiceImpl implements SalesService{
 	
 	@Autowired
 	ModelMapper mapper;
+	
+	@Autowired
+	StringToObjectConvert stringToObjectConvert;
 
 	@Override
-	public SalesDTO addNewSales(SalesDTO sales, MultipartFile[] salesImgs) {
+	public SalesDTO addNewSales(String sales, MultipartFile[] salesImgs) {
 		List<SalesImages> images = addImages(salesImgs);
-		Sales sale = mapper.map(sales, Sales.class);
+		Sales sale = mapper.map(stringToObjectConvert.convertJsonToObject(sales, SalesDTO.class), Sales.class);
 		sale.setImg(images);
 		return mapper.map(salesRepository.save(sale), SalesDTO.class);
 	}
@@ -56,12 +60,13 @@ public class SalesServiceImpl implements SalesService{
 	}
 
 	@Override
-	public SalesDTO updateSales(SalesDTO sales, MultipartFile[] salesImgs) {
-		Optional<Sales> sale = salesRepository.findById(sales.getId());
+	public SalesDTO updateSales(String sales, MultipartFile[] salesImgs) {
+		SalesDTO salesDTO = stringToObjectConvert.convertJsonToObject(sales, SalesDTO.class);
+		Optional<Sales> sale = salesRepository.findById(salesDTO.getId());
 		List<SalesImages> img = addImages(salesImgs);
 		
 		if(!sale.isEmpty()) {
-			Sales sl = mapper.map(sales, Sales.class);
+			Sales sl = mapper.map(salesDTO, Sales.class);
 			sl.setImg(img);
 			return mapper.map(salesRepository.save(sl), SalesDTO.class);
 		}

@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/toAll")
 public class PaymentController {
 
-    @Autowired
-    PaymentService paymentService;
-    @PostMapping("/transaction")
-    public ResponseEntity<Payment> createTransaction(@RequestBody Payment payment) throws RazorpayException {
-    return new ResponseEntity<>(paymentService.createTransaction(payment), HttpStatus.CREATED);
-    }
+	@Autowired
+	PaymentService paymentService;
+
+	@PostMapping("/transaction")
+	public ResponseEntity<Payment> createTransaction(@RequestBody Payment payment) throws RazorpayException {
+		return new ResponseEntity<>(paymentService.createTransaction(payment), HttpStatus.CREATED);
+	}
 }

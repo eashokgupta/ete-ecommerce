@@ -6,8 +6,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +95,7 @@ public class UserService {
 	     String userId = null;
 	     if (authHeader != null && authHeader.startsWith("Bearer ")) {
 	         token = authHeader.substring(7);
-	         userId = jwtUtil.extractUsername(token);
+	      return   userId = jwtUtil.extractUsername(token);
 	     }
 		return userId;
 		

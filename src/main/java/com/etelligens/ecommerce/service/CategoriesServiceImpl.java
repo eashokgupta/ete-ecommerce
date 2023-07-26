@@ -34,8 +34,10 @@ public class CategoriesServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryDTO addCategory(MultipartFile file, CategoryDTO category) throws IOException {
+	public CategoryDTO addCategory(MultipartFile file, String name) throws IOException {
 
+		CategoryDTO category = new CategoryDTO();
+		category.setName(name);
 		category.setImg(file.getBytes());
 
 		boolean value = categoryRepository.findByName(category.getName()).isEmpty();
@@ -47,31 +49,18 @@ public class CategoriesServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryDTO updateCategory(MultipartFile file, CategoryDTO category) throws IOException {
-		if(!file.isEmpty()) {
-			category.setImg(file.getBytes());
+	public CategoryDTO updateCategory(Long id, MultipartFile file, String name) throws IOException {
+		CategoryDTO categoryDTO = new CategoryDTO();
+		categoryDTO.setName(name);
+		if (!file.isEmpty()) {
+			categoryDTO.setImg(file.getBytes());
 		}
 
-		Optional<Category> categ= categoryRepository.findByName(category.getName());
+		Optional<Category> categ = categoryRepository.findById(id);
 		Boolean value = categ.isEmpty();
 		if (Boolean.FALSE.equals(value)) {
-			Long id = categ.get().getId();
-			Category cate = mapper.map(category, Category.class);
-			String sentence = category.getName();
-			String[] words = sentence.split("\\s+");
-
-	        StringBuilder capitalizedSentence = new StringBuilder();
-
-	        for (String word : words) {
-	            String capitalizedWord = word.substring(0, 1).toUpperCase() + word.substring(1);
-	            capitalizedSentence.append(capitalizedWord).append(" ");
-	        }
-
-	        capitalizedSentence = new StringBuilder(capitalizedSentence.toString().trim());
-	        System.out.println(cate.getId());
-	        
-	        cate.setName(capitalizedSentence.toString());
-	        cate.setId(id);
+			Category cate = mapper.map(categoryDTO, Category.class);
+			cate.setId(categ.get().getId());
 			return mapper.map(categoryRepository.save(cate), CategoryDTO.class);
 		}
 		return null;

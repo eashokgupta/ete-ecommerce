@@ -1,7 +1,6 @@
 package com.etelligens.ecommerce.controllers;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.etelligens.ecommerce.auth.service.UserService;
 import com.etelligens.ecommerce.dto.ProfileDTO;
-import com.etelligens.ecommerce.model.Profile;
 import com.etelligens.ecommerce.service.ProfileService;
-import com.google.gson.Gson;
 
-
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/ecommerce")
@@ -30,35 +28,32 @@ public class ProfileController {
 	@Autowired
 	ProfileService profileService;
 
-	@PostMapping("/createProfile")
-	public ResponseEntity<ProfileDTO> createProfile(@RequestParam("file") MultipartFile file,
-			@RequestParam("detail") String profile) throws IOException {
-		Gson g = new Gson(); 
-		ProfileDTO s = g.fromJson(profile, ProfileDTO.class);
+	@Autowired
+	UserService userService;
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(profileService.addProfile(file, s));
+	@PostMapping("/createProfile")
+	public ResponseEntity<ProfileDTO> createProfile(HttpServletRequest request,
+			@RequestParam("file") MultipartFile file, @RequestParam("detail") String profile) throws IOException {
+		String userId = userService.getUserName(request);
+		return ResponseEntity.status(HttpStatus.OK).body(profileService.addProfile(userId, file, profile));
 
 	}
 
-	@GetMapping("/profile/{id}")
-	public Optional<Profile> findById(@PathVariable Long id) {
-		return profileService.getProfileById(id);
+	@GetMapping("/profile")
+	public ResponseEntity<ProfileDTO> findById(HttpServletRequest request) {
+		String userId = userService.getUserName(request);
+		return new ResponseEntity<>(profileService.getProfileById(userId), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteProfile/{id}")
 	public ResponseEntity<String> deleteProfile(@PathVariable Long id) {
-		profileService.deleteProfileById(id);
-
-		return new ResponseEntity<>("Profile Successfully Deleted", HttpStatus.OK);
+		return new ResponseEntity<>(profileService.deleteProfileById(id), HttpStatus.OK);
 	}
 
 	@PutMapping("updateProfile")
-	public ResponseEntity<ProfileDTO> updateProfile(@RequestParam("file") MultipartFile file, @RequestParam("detail") String profile) throws IOException{
-		Gson g = new Gson(); 
-		ProfileDTO s =g.fromJson(profile, ProfileDTO.class);
-				
-
-		return ResponseEntity.status(HttpStatus.OK).body(profileService.updateProfile(file,s));
+	public ResponseEntity<ProfileDTO> updateProfile(@RequestParam("file") MultipartFile file,
+			@RequestParam("detail") String profile) throws IOException {
+		return ResponseEntity.status(HttpStatus.OK).body(profileService.updateProfile(file, profile));
 	}
 
 }
