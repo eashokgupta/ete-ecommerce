@@ -1,6 +1,7 @@
 package com.etelligens.ecommerce.dto;
 
 import com.etelligens.ecommerce.auth.dto.UserDTO;
+import com.etelligens.ecommerce.model.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class OrderDto {
 	    private Date orderDate;
 	    private UserDTO user;
 	    private AddressDTO address;
+		private List<ProductDTO> productDTOS;
 	    
 	   
 }

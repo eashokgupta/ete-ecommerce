@@ -22,7 +22,7 @@ import com.etelligens.ecommerce.service.ProfileService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/ecommerce")
+@RequestMapping("/ecommerce/orders")
 public class ProfileController {
 
 	@Autowired
