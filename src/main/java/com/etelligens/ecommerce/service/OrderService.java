@@ -6,7 +6,7 @@ import com.etelligens.ecommerce.model.Orders;
 
 public interface OrderService {
 
-	public Orders getOrderById(long id);
+	public OrderDto getOrderById(Long id);
 
 	public OrderDto createOrder(String userId, OrderDto order);
 
