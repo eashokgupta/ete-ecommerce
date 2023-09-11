@@ -21,6 +21,9 @@ import com.etelligens.ecommerce.service.ReviewService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/*
+* This Controller class will work for Give Review of order
+ */
 @RestController
 @RequestMapping("/ecommerce/reviews")
 public class ReviewController {
@@ -31,30 +34,47 @@ public class ReviewController {
 	@Autowired
 	UserService userService;
 
+	
+	/*
+     * This API will work for create review of order
+     */
 	@PostMapping("/createreview")
 	public ResponseEntity<ReviewDTO> createReview(HttpServletRequest request, @RequestParam("review") String review,
 			@RequestParam("imgs") MultipartFile[] files) {
 		String userId = userService.getUserName(request);
 		return ResponseEntity.status(HttpStatus.OK).body(reviewService.addReview(userId, review, files));
 	}
-
+	/*
+     * This API will work for update review of order by id.
+     */
 	@PutMapping("/{id}")
 	public ResponseEntity<ReviewDTO> updateReview(HttpServletRequest request, @RequestParam("review") String review,
 			@RequestParam("imgs") MultipartFile[] files) {
 		String userId = userService.getUserName(request);
 		return new ResponseEntity<>(reviewService.updateReview(userId, review, files), HttpStatus.OK);
 	}
+	
+	/*
+     * This API will work for delete review of order By id.
+     */
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteReviewById(@PathVariable("id") Long reviewId) {
 		return new ResponseEntity<>(reviewService.deleteReview(reviewId), HttpStatus.OK);
 	}
+	
+	/*
+     * This API will work for get All review of order
+     */
 
 	@GetMapping("/{productId}/getAll")
 	public ResponseEntity<List<ReviewDTO>> getAllReviews(@PathVariable Long productId) {
 		return new ResponseEntity<>(reviewService.getAll(productId), HttpStatus.OK);
 	}
 	
+	/*
+     * This API will work for delete review  image of order by id.
+     */
 	@DeleteMapping("delete-reviewImages/{id}")
 	public ResponseEntity<String> deleteReviewImages(@PathVariable("id") Long imageId){
 		return new ResponseEntity<>(reviewService.deleteReviewImages(imageId), HttpStatus.OK);

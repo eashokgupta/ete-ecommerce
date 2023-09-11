@@ -24,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			""")
 	public List<Product> getProducts(String value);
 
-	@Query(value = "SELECT * FROM product WHERE price >= :minPrice AND price <= :maxPrice", nativeQuery = true)
+	@Query(value = "SELECT * FROM product WHERE price_after_discount >= :minPrice AND price_after_discount <= :maxPrice", nativeQuery = true)
 	public List<Product> getFilterProducts(@Param("minPrice") Double minPrice, @Param("maxPrice") Double maxPrice);
 
 	@Query("""

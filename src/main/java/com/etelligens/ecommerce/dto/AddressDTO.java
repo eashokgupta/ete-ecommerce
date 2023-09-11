@@ -2,14 +2,16 @@ package com.etelligens.ecommerce.dto;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AddressDTO {
 
 
@@ -17,7 +19,7 @@ public class AddressDTO {
 	private String firstName;
 	private String lastName;
 	private String streetAddress;
-	private String streetAddress1;
+	private String streetAddress2;
 	private Long phoneNumber;
 	private String city;
 	private String stateProvinceRegion;

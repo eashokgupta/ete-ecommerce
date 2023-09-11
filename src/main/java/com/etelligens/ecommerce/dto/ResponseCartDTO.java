@@ -13,13 +13,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartDTO {
+public class ResponseCartDTO {
 	private Long id;
-	private Long productId;
-	private Integer quantity;
-	private Integer price;
+	private int quantity;
+	private ProductResponseDTO productResponseDTO;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "UTC")
 	private LocalDateTime createdAt;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "UTC")
 	private LocalDateTime updatedAt;
+
 }

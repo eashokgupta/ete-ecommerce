@@ -21,8 +21,11 @@ import com.etelligens.ecommerce.service.ProfileService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+* This Controller class  will work for add,update,get and delete profile of user.
+*/
 @RestController
-@RequestMapping("/ecommerce/orders")
+@RequestMapping("/ecommerce")
 public class ProfileController {
 
 	@Autowired
@@ -31,6 +34,9 @@ public class ProfileController {
 	@Autowired
 	UserService userService;
 
+	/**
+	* This Api will work for add profile of User.
+	*/
 	@PostMapping("/createProfile")
 	public ResponseEntity<ProfileDTO> createProfile(HttpServletRequest request,
 			@RequestParam("file") MultipartFile file, @RequestParam("detail") String profile) throws IOException {
@@ -38,18 +44,27 @@ public class ProfileController {
 		return ResponseEntity.status(HttpStatus.OK).body(profileService.addProfile(userId, file, profile));
 
 	}
-
+	/**
+	* This Api will work for get profile of User By Id.
+	*/
 	@GetMapping("/profile")
 	public ResponseEntity<ProfileDTO> findById(HttpServletRequest request) {
 		String userId = userService.getUserName(request);
 		return new ResponseEntity<>(profileService.getProfileById(userId), HttpStatus.OK);
 	}
+	
+	/**
+	* This Api will work for delete profile of User By Id.
+	*/
 
 	@DeleteMapping("/deleteProfile/{id}")
 	public ResponseEntity<String> deleteProfile(@PathVariable Long id) {
 		return new ResponseEntity<>(profileService.deleteProfileById(id), HttpStatus.OK);
 	}
 
+	/**
+	* This Api will work for update profile of User.
+	*/
 	@PutMapping("updateProfile")
 	public ResponseEntity<ProfileDTO> updateProfile(@RequestParam("file") MultipartFile file,
 			@RequestParam("detail") String profile) throws IOException {

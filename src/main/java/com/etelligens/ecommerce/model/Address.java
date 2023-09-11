@@ -3,10 +3,12 @@ package com.etelligens.ecommerce.model;
 import java.io.Serializable;
 
 import com.etelligens.ecommerce.auth.model.User;
+import com.etelligens.ecommerce.dto.AddressDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Table(name = "Address")
+@Builder
 public class Address implements Serializable {
 	/**
 	 * 

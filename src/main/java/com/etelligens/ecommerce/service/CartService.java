@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.etelligens.ecommerce.dto.CartDTO;
+import com.etelligens.ecommerce.dto.ResponseCartDTO;
 
 @Component
 @Service
@@ -16,9 +17,9 @@ public interface CartService {
 
 	public CartDTO updateCart(String userId, CartDTO cart);
 
-	public List<CartDTO> getAllCartItem(String userId);
+	public List<ResponseCartDTO> getAllCartItem(String userId);
 
-	public CartDTO getCartProductById(String userId, Long id);
+	public ResponseCartDTO getCartProductById(String userId, Long id);
 	
 	
 }

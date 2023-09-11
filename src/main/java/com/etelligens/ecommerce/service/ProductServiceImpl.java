@@ -88,8 +88,10 @@ public class ProductServiceImpl implements ProductService {
 
 		if ("%".equals(discountType)) {
 			Double discountAmount = productDTO.getDiscountAmount();
-			Double priceAfterDiscount = productDTO.getPrice() * (discountAmount / 100);
-			productDTO.setPriceAfterDiscount(priceAfterDiscount);
+			Double p = productDTO.getPrice();
+			Double priceAfterDiscount = p * (discountAmount / 100);
+			Double prce = p-priceAfterDiscount;
+			productDTO.setPriceAfterDiscount(prce);
 			product.setPriceAfterDiscount(priceAfterDiscount);
 		}
 		else {
@@ -243,7 +245,7 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductDTO> getProductByCategoryId(Long id) {
 		List<Product> products = productRepo.findAllByCategoryId(id);
 		try {
-			return productToProductDTO.convertListProductToListProductDTO(products);
+			return null;// productToProductDTO.convertListProductToListProductDTO(products);
 
 		} catch (Exception e) {
 			e.getMessage();
@@ -270,27 +272,38 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ProductDTO> searchProducts(String value) {
+	public List<ProductResponseDTO> searchProducts(String value) {
 		List<Product> products = productRepo.getProducts(value);
-
-		return productToProductDTO.convertListProductToListProductDTO(products);
+		List<ProductResponseDTO> productList = new ArrayList<>();
+		for(Product product : products) {
+			ProductResponseDTO productDTO = mapper.map(product, ProductResponseDTO.class);
+			productDTO.setProductImage(product.getProductMetaData().get(0).getImages().get(0).getImg());
+		productList.add(productDTO);
+		}
+		return productList;
 	}
 
 	@Override
-	public List<ProductDTO> filterProducts(Double minPrice, Double maxPrice) {
+	public List<ProductResponseDTO> filterProducts(Double minPrice, Double maxPrice) {
 		List<Product> filterProducts = productRepo.getFilterProducts(minPrice, maxPrice);
-		return productToProductDTO.convertListProductToListProductDTO(filterProducts);
+		List<ProductResponseDTO> productList = new ArrayList<>();
+		for(Product product : filterProducts) {
+			ProductResponseDTO productDTO = mapper.map(product, ProductResponseDTO.class);
+			productDTO.setProductImage(product.getProductMetaData().get(0).getImages().get(0).getImg());
+		productList.add(productDTO);
+		}
+		return productList;
 	}
 
 	@Override
 	public List<ProductDTO> getSalesProduct(String salesType) {
 		List<Product> products = productRepo.getSalesProducts(salesType);
-		return productToProductDTO.convertListProductToListProductDTO(products);
+		return null ; // productToProductDTO.convertListProductToListProductDTO(products);
 	}
 
 	public ProductDTO getProductsByColor(Long productId, String color){
 		Product product = productRepo.findByIdAndColor(productId, color);
-		return productToProductDTO.convertProductToProductDTO(product);
+		return null; //productToProductDTO.convertProductToProductDTO(product);
 	}
 
 	@Override
@@ -304,5 +317,16 @@ public class ProductServiceImpl implements ProductService {
 		productList.add(productDTO);
 		}
 		return productList;
+	}
+	
+	@Override
+	public ProductResponseDTO getProductResponseDTOById(Long productId) {
+		
+		Optional<Product> product = productRepo.findById(productId);
+		
+			ProductResponseDTO productDTO = mapper.map(product.get(), ProductResponseDTO.class);
+			productDTO.setProductImage(product.get().getProductMetaData().get(0).getImages().get(0).getImg());
+		
+		return productDTO;
 	}
 }

@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+* This Controller class will work for add,update,get and delete  product from whislist.
+*/
 @RestController
 @RequestMapping("/ecommerce")
 public class WishListController {
@@ -32,18 +35,30 @@ public class WishListController {
     @Autowired
     UserService userService;
 
+    /**
+	* This Api will work for get products from wishlist.
+	*/
     @GetMapping("/get-wishlist")
     public ResponseEntity<List<ProductDTO>> getWishList(HttpServletRequest request) {
         String userEmail = userService.getUserName(request);
         return new ResponseEntity<>(wishListService.readWishList(userEmail), HttpStatus.OK);
     }
 
+
+    /**
+	* This Api will work for add products to wishlist.
+	*/
+    
     @PostMapping("/wishlist")
     public ResponseEntity<String> createWishList(HttpServletRequest request, @RequestBody WishListDTO wishList) {
         String userEmail = userService.getUserName(request);
         return new ResponseEntity<>(wishListService.createWishlist(userEmail,wishList),HttpStatus.OK);
 
     }
+    
+    /**
+	* This Api will work for delete products to wishlist By id.
+	*/
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> removeWishList(@PathVariable Long id){
         return new ResponseEntity<>(wishListService.deleteWishList(id),HttpStatus.OK);

@@ -30,9 +30,9 @@ public interface ProductService {
 
 	public ProductDTO addProductDetails(String productId, String productMetaData, String metaData,
 			MultipartFile[] files) throws IOException;
-	public List<ProductDTO> searchProducts(String value);
+	public List<ProductResponseDTO> searchProducts(String value);
 	
-	 public List<ProductDTO> filterProducts(Double minPrice, Double maxPrice);
+	 public List<ProductResponseDTO> filterProducts(Double minPrice, Double maxPrice);
 
 	public List<ProductDTO> getSalesProduct(String salesType);
 
@@ -41,4 +41,6 @@ public interface ProductService {
 	public ProductDTO getProductsByColor(Long id, String color);
 
 	public List<ProductResponseDTO> getProductResponseDTO();
+
+	public ProductResponseDTO getProductResponseDTOById(Long productId);
 }

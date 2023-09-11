@@ -21,6 +21,8 @@ public class ProductResponseDTO {
 	
 	private float rating;
 	
+	private Double price;
+	
 	private Double priceAfterDiscount;
 	
 	private String brand;
